@@ -110,11 +110,14 @@ public class PasswordHistoryService {
     }
     
     @Transactional(readOnly = true)
-    public Boolean isPasswordHistoryExists(Integer historyNo, String password, String email) {
+    public Boolean isPasswordHistoryExists(Integer historyNo, String password, String email, String currentPassword) {
     	log.debug("Request to get PasswordHistory : {}", historyNo + ": Password: " + password + " Email: " + email);
-    	String encryptedPassword = passwordEncoder.encode(password);    	
+    	String encryptedPassword = passwordEncoder.encode(password);
     	Optional<PasswordHistory> result = null;
     	switch (historyNo) {
+    		case 1:
+    			result = passwordHistoryRepository.findOneByHistoryNo1AndUserEmail(encryptedPassword, email);
+    			break;
     		case 2:
     			result = passwordHistoryRepository.findOneByHistoryNo2AndUserEmail(encryptedPassword, email);
     			break;
@@ -128,25 +131,19 @@ public class PasswordHistoryService {
     			result = passwordHistoryRepository.findOneByHistoryNo5AndUserEmail(encryptedPassword, email);
     			break;
     		default:
-    			result = passwordHistoryRepository.findOneByHistoryNo1AndUserEmail(encryptedPassword, email);
+    			// Check with current password    			
     			break;    			
     	}
-    	if (result.isPresent()) {
-    		return true;
+    	if (historyNo == 0) {
+    		if (passwordEncoder.matches(password, currentPassword)) 
+				return true;
+			else 
+				return false;			
     	} else {
-    		return false;
-    	}
-    }
-    
-    @Transactional(readOnly = true)
-    public Boolean isPasswordExists(String password, String email) {
-    	log.debug("Request to get PasswordHistory : {}", "Password: " + password + " Email: " + email);
-    	String encryptedPassword = passwordEncoder.encode(password);
-    	Optional<PasswordHistory> result = passwordHistoryRepository.findByHistoryNo1OrHistoryNo2OrHistoryNo3OrHistoryNo4OrHistoryNo5AndUserEmail(encryptedPassword, email);
-    	if (result.isPresent()) {
-    		return true;
-    	} else {
-    		return false;
+	    	if (result.isPresent()) 
+	    		return true;
+	    	else 
+	    		return false;	    	
     	}
     }
     

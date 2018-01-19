@@ -20,6 +20,6 @@ public interface PasswordHistoryRepository extends JpaRepository<PasswordHistory
 	Optional<PasswordHistory> findOneByHistoryNo3AndUserEmail(String encryptedPassword, String email);
 	Optional<PasswordHistory> findOneByHistoryNo4AndUserEmail(String encryptedPassword, String email);
 	Optional<PasswordHistory> findOneByHistoryNo5AndUserEmail(String encryptedPassword, String email);
-	Optional<PasswordHistory> findByHistoryNo1OrHistoryNo2OrHistoryNo3OrHistoryNo4OrHistoryNo5AndUserEmail(String encryptedPassword, String email);
+	//Optional<PasswordHistory> findByHistoryNo1OrHistoryNo2OrHistoryNo3OrHistoryNo4OrHistoryNo5AndUserEmail(String encryptedPassword, String email);
     
 }
