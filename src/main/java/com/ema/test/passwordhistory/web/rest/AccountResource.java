@@ -6,8 +6,11 @@ import com.ema.test.passwordhistory.domain.User;
 import com.ema.test.passwordhistory.repository.UserRepository;
 import com.ema.test.passwordhistory.security.SecurityUtils;
 import com.ema.test.passwordhistory.service.MailService;
+import com.ema.test.passwordhistory.service.PasswordHistoryService;
 import com.ema.test.passwordhistory.service.UserService;
+import com.ema.test.passwordhistory.service.dto.PasswordHistoryDTO;
 import com.ema.test.passwordhistory.service.dto.UserDTO;
+import com.ema.test.passwordhistory.web.rest.vm.EmailAndPasswordVM;
 import com.ema.test.passwordhistory.web.rest.vm.KeyAndPasswordVM;
 import com.ema.test.passwordhistory.web.rest.vm.ManagedUserVM;
 import com.ema.test.passwordhistory.web.rest.util.HeaderUtil;
@@ -39,15 +42,18 @@ public class AccountResource {
     private final UserService userService;
 
     private final MailService mailService;
+    
+    private final PasswordHistoryService passwordHistoryService;
 
     private static final String CHECK_ERROR_MESSAGE = "Incorrect password";
 
     public AccountResource(UserRepository userRepository, UserService userService,
-            MailService mailService) {
+            MailService mailService, PasswordHistoryService passwordHistoryService) {
 
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
+        this.passwordHistoryService = passwordHistoryService;
     }
 
     /**
@@ -153,6 +159,7 @@ public class AccountResource {
      * @param password the new password
      * @return the ResponseEntity with status 200 (OK), or status 400 (Bad Request) if the new password is not strong enough
      */
+    /* Original
     @PostMapping(path = "/account/change_password",
         produces = MediaType.TEXT_PLAIN_VALUE)
     @Timed
@@ -160,11 +167,55 @@ public class AccountResource {
         if (!checkPasswordLength(password)) {
             return new ResponseEntity<>(CHECK_ERROR_MESSAGE, HttpStatus.BAD_REQUEST);
         }
-        // TODO: Check with history passwords
-        
         userService.changePassword(password);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    */
+    @PostMapping(path = "/account/change_password",
+            produces = MediaType.TEXT_PLAIN_VALUE)
+    @Timed
+    public ResponseEntity changePassword(@RequestBody EmailAndPasswordVM emailAndPasswordVM) {
+        if (!checkPasswordLength(emailAndPasswordVM.getPassword())) {
+            return new ResponseEntity<>(CHECK_ERROR_MESSAGE, HttpStatus.BAD_REQUEST);
+        }
+        // Check password history
+        Boolean isPasswordExists = passwordHistoryService.isPasswordExists(emailAndPasswordVM.getPassword(), emailAndPasswordVM.getEmail());
+        if (isPasswordExists) {
+        	return new ResponseEntity<>("PASSWORD ALREADY EXISTED", HttpStatus.OK);
+        } else {
+        	userService.changePassword(emailAndPasswordVM.getPassword());
+        	// Insert into PasswordHistory
+        	Optional<User> user = userRepository.findOneByEmail(emailAndPasswordVM.getEmail());
+        	// Loop for every history
+        	for (int i = 1; i < 6; i++) {
+        		Boolean isPasswordHistoryExists = passwordHistoryService.isPasswordHistoryExists(i, emailAndPasswordVM.getPassword(), emailAndPasswordVM.getEmail());
+        		if (!isPasswordHistoryExists) {
+        			PasswordHistoryDTO passwordHistoryDTO = new PasswordHistoryDTO();
+        			passwordHistoryDTO.setUserId(user.get().getId());
+        			passwordHistoryDTO.setUserLogin(emailAndPasswordVM.getEmail());
+        			switch (i) {        				
+        				case 2:
+        					passwordHistoryDTO.setHistoryNo2(emailAndPasswordVM.getPassword());
+        					break;
+        				case 3:
+        					passwordHistoryDTO.setHistoryNo3(emailAndPasswordVM.getPassword());
+        					break;
+        				case 4:
+        					passwordHistoryDTO.setHistoryNo4(emailAndPasswordVM.getPassword());
+        					break;
+        				case 5:
+        					passwordHistoryDTO.setHistoryNo1(emailAndPasswordVM.getPassword());
+        					break;
+        				default:
+        					passwordHistoryDTO.setHistoryNo1(emailAndPasswordVM.getPassword());
+        					break;
+        			}
+        			passwordHistoryService.save(passwordHistoryDTO);
+        		}
+        	}
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+    }    
 
     /**
      * POST   /account/reset_password/init : Send an email to reset the password of the user

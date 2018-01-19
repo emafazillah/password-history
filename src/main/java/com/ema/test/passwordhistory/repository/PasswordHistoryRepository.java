@@ -3,6 +3,8 @@ package com.ema.test.passwordhistory.repository;
 import com.ema.test.passwordhistory.domain.PasswordHistory;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.*;
 
 
@@ -12,5 +14,12 @@ import org.springframework.data.jpa.repository.*;
 @SuppressWarnings("unused")
 @Repository
 public interface PasswordHistoryRepository extends JpaRepository<PasswordHistory,Long> {
+	
+	Optional<PasswordHistory> findOneByHistoryNo1AndUserEmail(String encryptedPassword, String email);
+	Optional<PasswordHistory> findOneByHistoryNo2AndUserEmail(String encryptedPassword, String email);
+	Optional<PasswordHistory> findOneByHistoryNo3AndUserEmail(String encryptedPassword, String email);
+	Optional<PasswordHistory> findOneByHistoryNo4AndUserEmail(String encryptedPassword, String email);
+	Optional<PasswordHistory> findOneByHistoryNo5AndUserEmail(String encryptedPassword, String email);
+	Optional<PasswordHistory> findByHistoryNo1OrHistoryNo2OrHistoryNo3OrHistoryNo4OrHistoryNo5AndUserEmail(String encryptedPassword, String email);
     
 }

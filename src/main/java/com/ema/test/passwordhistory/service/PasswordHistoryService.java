@@ -9,11 +9,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
+
+import java.util.Optional;
 
 /**
  * Service Implementation for managing PasswordHistory.
@@ -29,11 +32,15 @@ public class PasswordHistoryService {
     private final PasswordHistoryMapper passwordHistoryMapper;
 
     private final PasswordHistorySearchRepository passwordHistorySearchRepository;
+    
+    private final PasswordEncoder passwordEncoder;
 
-    public PasswordHistoryService(PasswordHistoryRepository passwordHistoryRepository, PasswordHistoryMapper passwordHistoryMapper, PasswordHistorySearchRepository passwordHistorySearchRepository) {
+    public PasswordHistoryService(PasswordHistoryRepository passwordHistoryRepository, PasswordHistoryMapper passwordHistoryMapper, 
+    		PasswordHistorySearchRepository passwordHistorySearchRepository, PasswordEncoder passwordEncoder) {
         this.passwordHistoryRepository = passwordHistoryRepository;
         this.passwordHistoryMapper = passwordHistoryMapper;
         this.passwordHistorySearchRepository = passwordHistorySearchRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -101,4 +108,46 @@ public class PasswordHistoryService {
         Page<PasswordHistory> result = passwordHistorySearchRepository.search(queryStringQuery(query), pageable);
         return result.map(passwordHistoryMapper::toDto);
     }
+    
+    @Transactional(readOnly = true)
+    public Boolean isPasswordHistoryExists(Integer historyNo, String password, String email) {
+    	log.debug("Request to get PasswordHistory : {}", historyNo + ": Password: " + password + " Email: " + email);
+    	String encryptedPassword = passwordEncoder.encode(password);    	
+    	Optional<PasswordHistory> result = null;
+    	switch (historyNo) {
+    		case 2:
+    			result = passwordHistoryRepository.findOneByHistoryNo2AndUserEmail(encryptedPassword, email);
+    			break;
+    		case 3:
+    			result = passwordHistoryRepository.findOneByHistoryNo3AndUserEmail(encryptedPassword, email);
+    			break;
+    		case 4:
+    			result = passwordHistoryRepository.findOneByHistoryNo4AndUserEmail(encryptedPassword, email);
+    			break;
+    		case 5:
+    			result = passwordHistoryRepository.findOneByHistoryNo5AndUserEmail(encryptedPassword, email);
+    			break;
+    		default:
+    			result = passwordHistoryRepository.findOneByHistoryNo1AndUserEmail(encryptedPassword, email);
+    			break;    			
+    	}
+    	if (result.isPresent()) {
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
+    
+    @Transactional(readOnly = true)
+    public Boolean isPasswordExists(String password, String email) {
+    	log.debug("Request to get PasswordHistory : {}", "Password: " + password + " Email: " + email);
+    	String encryptedPassword = passwordEncoder.encode(password);
+    	Optional<PasswordHistory> result = passwordHistoryRepository.findByHistoryNo1OrHistoryNo2OrHistoryNo3OrHistoryNo4OrHistoryNo5AndUserEmail(encryptedPassword, email);
+    	if (result.isPresent()) {
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
+    
 }
