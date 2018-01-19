@@ -7,6 +7,7 @@ import com.ema.test.passwordhistory.repository.AuthorityRepository;
 import com.ema.test.passwordhistory.repository.UserRepository;
 import com.ema.test.passwordhistory.security.AuthoritiesConstants;
 import com.ema.test.passwordhistory.service.MailService;
+import com.ema.test.passwordhistory.service.PasswordHistoryService;
 import com.ema.test.passwordhistory.service.UserService;
 import com.ema.test.passwordhistory.service.dto.UserDTO;
 import com.ema.test.passwordhistory.web.rest.vm.KeyAndPasswordVM;
@@ -62,6 +63,9 @@ public class AccountResourceIntTest {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    private PasswordHistoryService passwordHistorySerivce;
 
     @Autowired
     private HttpMessageConverter[] httpMessageConverters;
@@ -82,10 +86,10 @@ public class AccountResourceIntTest {
         doNothing().when(mockMailService).sendActivationEmail(anyObject());
 
         AccountResource accountResource =
-            new AccountResource(userRepository, userService, mockMailService);
+            new AccountResource(userRepository, userService, mockMailService, passwordHistorySerivce);
 
         AccountResource accountUserMockResource =
-            new AccountResource(userRepository, mockUserService, mockMailService);
+            new AccountResource(userRepository, mockUserService, mockMailService, passwordHistorySerivce);
 
         this.restMvc = MockMvcBuilders.standaloneSetup(accountResource)
             .setMessageConverters(httpMessageConverters)
