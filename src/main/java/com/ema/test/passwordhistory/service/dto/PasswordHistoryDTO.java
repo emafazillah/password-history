@@ -13,15 +13,15 @@ public class PasswordHistoryDTO implements Serializable {
 
     private Long id;
 
-    private String history_no1;
+    private String historyNo1;
 
-    private String history_no2;
+    private String historyNo2;
 
-    private String history_no3;
+    private String historyNo3;
 
-    private String history_no4;
+    private String historyNo4;
 
-    private String history_no5;
+    private String historyNo5;
 
     private Long userId;
 
@@ -35,44 +35,44 @@ public class PasswordHistoryDTO implements Serializable {
         this.id = id;
     }
 
-    public String getHistory_no1() {
-        return history_no1;
+    public String getHistoryNo1() {
+        return historyNo1;
     }
 
-    public void setHistory_no1(String history_no1) {
-        this.history_no1 = history_no1;
+    public void setHistoryNo1(String history_no1) {
+        this.historyNo1 = history_no1;
     }
 
-    public String getHistory_no2() {
-        return history_no2;
+    public String getHistoryNo2() {
+        return historyNo2;
     }
 
-    public void setHistory_no2(String history_no2) {
-        this.history_no2 = history_no2;
+    public void setHistoryNo2(String history_no2) {
+        this.historyNo2 = history_no2;
     }
 
-    public String getHistory_no3() {
-        return history_no3;
+    public String getHistoryNo3() {
+        return historyNo3;
     }
 
-    public void setHistory_no3(String history_no3) {
-        this.history_no3 = history_no3;
+    public void setHistoryNo3(String history_no3) {
+        this.historyNo3 = history_no3;
     }
 
-    public String getHistory_no4() {
-        return history_no4;
+    public String getHistoryNo4() {
+        return historyNo4;
     }
 
-    public void setHistory_no4(String history_no4) {
-        this.history_no4 = history_no4;
+    public void setHistoryNo4(String history_no4) {
+        this.historyNo4 = history_no4;
     }
 
-    public String getHistory_no5() {
-        return history_no5;
+    public String getHistoryNo5() {
+        return historyNo5;
     }
 
-    public void setHistory_no5(String history_no5) {
-        this.history_no5 = history_no5;
+    public void setHistoryNo5(String history_no5) {
+        this.historyNo5 = history_no5;
     }
 
     public Long getUserId() {
@@ -116,11 +116,11 @@ public class PasswordHistoryDTO implements Serializable {
     public String toString() {
         return "PasswordHistoryDTO{" +
             "id=" + getId() +
-            ", history_no1='" + getHistory_no1() + "'" +
-            ", history_no2='" + getHistory_no2() + "'" +
-            ", history_no3='" + getHistory_no3() + "'" +
-            ", history_no4='" + getHistory_no4() + "'" +
-            ", history_no5='" + getHistory_no5() + "'" +
+            ", history_no1='" + getHistoryNo1() + "'" +
+            ", history_no2='" + getHistoryNo2() + "'" +
+            ", history_no3='" + getHistoryNo3() + "'" +
+            ", history_no4='" + getHistoryNo4() + "'" +
+            ", history_no5='" + getHistoryNo5() + "'" +
             "}";
     }
 }

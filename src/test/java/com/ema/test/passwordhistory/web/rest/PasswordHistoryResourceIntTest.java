@@ -102,11 +102,11 @@ public class PasswordHistoryResourceIntTest {
      */
     public static PasswordHistory createEntity(EntityManager em) {
         PasswordHistory passwordHistory = new PasswordHistory()
-            .history_no1(DEFAULT_HISTORY_NO_1)
-            .history_no2(DEFAULT_HISTORY_NO_2)
-            .history_no3(DEFAULT_HISTORY_NO_3)
-            .history_no4(DEFAULT_HISTORY_NO_4)
-            .history_no5(DEFAULT_HISTORY_NO_5);
+            .historyNo1(DEFAULT_HISTORY_NO_1)
+            .historyNo2(DEFAULT_HISTORY_NO_2)
+            .historyNo3(DEFAULT_HISTORY_NO_3)
+            .historyNo4(DEFAULT_HISTORY_NO_4)
+            .historyNo5(DEFAULT_HISTORY_NO_5);
         return passwordHistory;
     }
 
@@ -132,11 +132,11 @@ public class PasswordHistoryResourceIntTest {
         List<PasswordHistory> passwordHistoryList = passwordHistoryRepository.findAll();
         assertThat(passwordHistoryList).hasSize(databaseSizeBeforeCreate + 1);
         PasswordHistory testPasswordHistory = passwordHistoryList.get(passwordHistoryList.size() - 1);
-        assertThat(testPasswordHistory.getHistory_no1()).isEqualTo(DEFAULT_HISTORY_NO_1);
-        assertThat(testPasswordHistory.getHistory_no2()).isEqualTo(DEFAULT_HISTORY_NO_2);
-        assertThat(testPasswordHistory.getHistory_no3()).isEqualTo(DEFAULT_HISTORY_NO_3);
-        assertThat(testPasswordHistory.getHistory_no4()).isEqualTo(DEFAULT_HISTORY_NO_4);
-        assertThat(testPasswordHistory.getHistory_no5()).isEqualTo(DEFAULT_HISTORY_NO_5);
+        assertThat(testPasswordHistory.getHistoryNo1()).isEqualTo(DEFAULT_HISTORY_NO_1);
+        assertThat(testPasswordHistory.getHistoryNo2()).isEqualTo(DEFAULT_HISTORY_NO_2);
+        assertThat(testPasswordHistory.getHistoryNo3()).isEqualTo(DEFAULT_HISTORY_NO_3);
+        assertThat(testPasswordHistory.getHistoryNo4()).isEqualTo(DEFAULT_HISTORY_NO_4);
+        assertThat(testPasswordHistory.getHistoryNo5()).isEqualTo(DEFAULT_HISTORY_NO_5);
 
         // Validate the PasswordHistory in Elasticsearch
         PasswordHistory passwordHistoryEs = passwordHistorySearchRepository.findOne(testPasswordHistory.getId());
@@ -218,11 +218,11 @@ public class PasswordHistoryResourceIntTest {
         // Update the passwordHistory
         PasswordHistory updatedPasswordHistory = passwordHistoryRepository.findOne(passwordHistory.getId());
         updatedPasswordHistory
-            .history_no1(UPDATED_HISTORY_NO_1)
-            .history_no2(UPDATED_HISTORY_NO_2)
-            .history_no3(UPDATED_HISTORY_NO_3)
-            .history_no4(UPDATED_HISTORY_NO_4)
-            .history_no5(UPDATED_HISTORY_NO_5);
+            .historyNo1(UPDATED_HISTORY_NO_1)
+            .historyNo2(UPDATED_HISTORY_NO_2)
+            .historyNo3(UPDATED_HISTORY_NO_3)
+            .historyNo4(UPDATED_HISTORY_NO_4)
+            .historyNo5(UPDATED_HISTORY_NO_5);
         PasswordHistoryDTO passwordHistoryDTO = passwordHistoryMapper.toDto(updatedPasswordHistory);
 
         restPasswordHistoryMockMvc.perform(put("/api/password-histories")
@@ -234,11 +234,11 @@ public class PasswordHistoryResourceIntTest {
         List<PasswordHistory> passwordHistoryList = passwordHistoryRepository.findAll();
         assertThat(passwordHistoryList).hasSize(databaseSizeBeforeUpdate);
         PasswordHistory testPasswordHistory = passwordHistoryList.get(passwordHistoryList.size() - 1);
-        assertThat(testPasswordHistory.getHistory_no1()).isEqualTo(UPDATED_HISTORY_NO_1);
-        assertThat(testPasswordHistory.getHistory_no2()).isEqualTo(UPDATED_HISTORY_NO_2);
-        assertThat(testPasswordHistory.getHistory_no3()).isEqualTo(UPDATED_HISTORY_NO_3);
-        assertThat(testPasswordHistory.getHistory_no4()).isEqualTo(UPDATED_HISTORY_NO_4);
-        assertThat(testPasswordHistory.getHistory_no5()).isEqualTo(UPDATED_HISTORY_NO_5);
+        assertThat(testPasswordHistory.getHistoryNo1()).isEqualTo(UPDATED_HISTORY_NO_1);
+        assertThat(testPasswordHistory.getHistoryNo2()).isEqualTo(UPDATED_HISTORY_NO_2);
+        assertThat(testPasswordHistory.getHistoryNo3()).isEqualTo(UPDATED_HISTORY_NO_3);
+        assertThat(testPasswordHistory.getHistoryNo4()).isEqualTo(UPDATED_HISTORY_NO_4);
+        assertThat(testPasswordHistory.getHistoryNo5()).isEqualTo(UPDATED_HISTORY_NO_5);
 
         // Validate the PasswordHistory in Elasticsearch
         PasswordHistory passwordHistoryEs = passwordHistorySearchRepository.findOne(testPasswordHistory.getId());

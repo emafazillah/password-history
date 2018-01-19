@@ -161,6 +161,7 @@ public class AccountResource {
             return new ResponseEntity<>(CHECK_ERROR_MESSAGE, HttpStatus.BAD_REQUEST);
         }
         // TODO: Check with history passwords
+        
         userService.changePassword(password);
         return new ResponseEntity<>(HttpStatus.OK);
     }
