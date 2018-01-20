@@ -182,7 +182,7 @@ public class AccountResource {
         Boolean checkPasswordExist = false;
     	Optional<User> user = userRepository.findOneByEmail(emailAndPasswordVM.getEmail());
     	if (user.isPresent()) {
-    		String currentPassword = user.get().getPassword();
+    		String currentPassword = "";
     		Optional<PasswordHistoryDTO> passwordHistoryDTO = passwordHistoryService.findOneByUserEmail(user.get().getEmail());
     		if (passwordHistoryDTO.isPresent()) {
     			// Loop for every history
@@ -191,21 +191,27 @@ public class AccountResource {
     				switch (i) {
 	    				case 1:
 	    					System.out.println(passwordHistoryDTO.get().getHistoryNo1());
+	    					currentPassword = passwordHistoryDTO.get().getHistoryNo1();
 	    					break;
 	    				case 2:
 	    					System.out.println(passwordHistoryDTO.get().getHistoryNo2());
+	    					currentPassword = passwordHistoryDTO.get().getHistoryNo2();
 	    					break;
 	    				case 3:
 	    					System.out.println(passwordHistoryDTO.get().getHistoryNo3());
+	    					currentPassword = passwordHistoryDTO.get().getHistoryNo3();
 	    					break;
 	    				case 4:
 	    					System.out.println(passwordHistoryDTO.get().getHistoryNo4());
+	    					currentPassword = passwordHistoryDTO.get().getHistoryNo4();
 	    					break;
 	    				case 5:
 	    					System.out.println(passwordHistoryDTO.get().getHistoryNo5());
+	    					currentPassword = passwordHistoryDTO.get().getHistoryNo5();
 	    					break;
     					default:
-    						System.out.println(currentPassword);
+    						System.out.println(user.get().getPassword());
+    						currentPassword = user.get().getPassword();
     						break;
     				}
     				Boolean isPasswordHistoryExists = passwordHistoryService.isPasswordHistoryExists(i, emailAndPasswordVM.getPassword(), 
