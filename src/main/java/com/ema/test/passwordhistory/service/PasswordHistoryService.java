@@ -121,10 +121,10 @@ public class PasswordHistoryService {
     	log.debug("Request to get PasswordHistory : {}", historyNo + ": Password: " + password + " Email: " + email);
     	Boolean output = false;
     	if (passwordEncoder.matches(password, currentPassword)) {
-			System.out.println("HISTORY NO. " + historyNo + " PASSWORD MATCHES");
+    		log.debug("HISTORY NO. " + historyNo + " PASSWORD MATCHES");
 			output = true;
 		} else {
-			System.out.println("HISTORY NO. " + historyNo + " PASSWORD NOT MATCHES");
+			log.debug("HISTORY NO. " + historyNo + " PASSWORD NOT MATCHES");
 		}
     	return output;
     }

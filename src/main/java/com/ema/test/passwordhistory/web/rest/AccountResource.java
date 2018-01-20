@@ -180,6 +180,7 @@ public class AccountResource {
         }
         // Check password history
         Boolean checkPasswordExist = false;
+        Boolean isPasswordHistoryExists = false;
     	Optional<User> user = userRepository.findOneByEmail(emailAndPasswordVM.getEmail());
     	if (user.isPresent()) {
     		String currentPassword = "";
@@ -187,47 +188,102 @@ public class AccountResource {
     		if (passwordHistoryDTO.isPresent()) {
     			// Loop for every history
     			for (int i = 0; i < 6; i++) {
-    				System.out.print(i + "===");
     				switch (i) {
 	    				case 1:
-	    					System.out.println(passwordHistoryDTO.get().getHistoryNo1());
 	    					currentPassword = passwordHistoryDTO.get().getHistoryNo1();
+	    					isPasswordHistoryExists = passwordHistoryService.isPasswordHistoryExists(i, emailAndPasswordVM.getPassword(), 
+	    							emailAndPasswordVM.getEmail(), currentPassword);
+	    					if (!isPasswordHistoryExists) {
+	    						PasswordHistoryDTO phDTO = new PasswordHistoryDTO();
+	    	    				phDTO.setHistoryNo2(currentPassword);
+	    	    				phDTO.setUserId(user.get().getId());
+	    	    				phDTO.setUserLogin(user.get().getEmail());
+	    	    				passwordHistoryService.save(phDTO);
+	    					} else {
+	    						checkPasswordExist = true;
+	    					}
 	    					break;
 	    				case 2:
-	    					System.out.println(passwordHistoryDTO.get().getHistoryNo2());
 	    					currentPassword = passwordHistoryDTO.get().getHistoryNo2();
+	    					isPasswordHistoryExists = passwordHistoryService.isPasswordHistoryExists(i, emailAndPasswordVM.getPassword(), 
+	    							emailAndPasswordVM.getEmail(), currentPassword);
+	    					if (!isPasswordHistoryExists) {
+	    						PasswordHistoryDTO phDTO = new PasswordHistoryDTO();
+	    	    				phDTO.setHistoryNo3(currentPassword);
+	    	    				phDTO.setUserId(user.get().getId());
+	    	    				phDTO.setUserLogin(user.get().getEmail());
+	    	    				passwordHistoryService.save(phDTO);
+	    					} else {
+	    						checkPasswordExist = true;
+	    					}
 	    					break;
 	    				case 3:
-	    					System.out.println(passwordHistoryDTO.get().getHistoryNo3());
 	    					currentPassword = passwordHistoryDTO.get().getHistoryNo3();
+	    					isPasswordHistoryExists = passwordHistoryService.isPasswordHistoryExists(i, emailAndPasswordVM.getPassword(), 
+	    							emailAndPasswordVM.getEmail(), currentPassword);
+	    					if (!isPasswordHistoryExists) {
+	    						PasswordHistoryDTO phDTO = new PasswordHistoryDTO();
+	    	    				phDTO.setHistoryNo4(currentPassword);
+	    	    				phDTO.setUserId(user.get().getId());
+	    	    				phDTO.setUserLogin(user.get().getEmail());
+	    	    				passwordHistoryService.save(phDTO);
+	    					} else {
+	    						checkPasswordExist = true;
+	    					}
 	    					break;
 	    				case 4:
-	    					System.out.println(passwordHistoryDTO.get().getHistoryNo4());
 	    					currentPassword = passwordHistoryDTO.get().getHistoryNo4();
+	    					isPasswordHistoryExists = passwordHistoryService.isPasswordHistoryExists(i, emailAndPasswordVM.getPassword(), 
+	    							emailAndPasswordVM.getEmail(), currentPassword);
+	    					if (!isPasswordHistoryExists) {
+	    						PasswordHistoryDTO phDTO = new PasswordHistoryDTO();
+	    	    				phDTO.setHistoryNo5(currentPassword);
+	    	    				phDTO.setUserId(user.get().getId());
+	    	    				phDTO.setUserLogin(user.get().getEmail());
+	    	    				passwordHistoryService.save(phDTO);
+	    					} else {
+	    						checkPasswordExist = true;
+	    					}
 	    					break;
 	    				case 5:
-	    					System.out.println(passwordHistoryDTO.get().getHistoryNo5());
 	    					currentPassword = passwordHistoryDTO.get().getHistoryNo5();
+	    					isPasswordHistoryExists = passwordHistoryService.isPasswordHistoryExists(i, emailAndPasswordVM.getPassword(), 
+	    							emailAndPasswordVM.getEmail(), currentPassword);
+	    					if (!isPasswordHistoryExists) {
+	    						PasswordHistoryDTO phDTO = new PasswordHistoryDTO();
+	    	    				phDTO.setHistoryNo1(currentPassword);
+	    	    				phDTO.setUserId(user.get().getId());
+	    	    				phDTO.setUserLogin(user.get().getEmail());
+	    	    				passwordHistoryService.save(phDTO);
+	    					} else {
+	    						checkPasswordExist = true;
+	    					}
 	    					break;
     					default:
-    						System.out.println(user.get().getPassword());
     						currentPassword = user.get().getPassword();
+    						isPasswordHistoryExists = passwordHistoryService.isPasswordHistoryExists(i, emailAndPasswordVM.getPassword(), 
+	    							emailAndPasswordVM.getEmail(), currentPassword);
+	    					if (!isPasswordHistoryExists) {
+	    						PasswordHistoryDTO phDTO = new PasswordHistoryDTO();
+	    	    				phDTO.setHistoryNo1(currentPassword);
+	    	    				phDTO.setUserId(user.get().getId());
+	    	    				phDTO.setUserLogin(user.get().getEmail());
+	    	    				passwordHistoryService.save(phDTO);
+	    					} else {
+	    						checkPasswordExist = true;
+	    					}
     						break;
     				}
-    				Boolean isPasswordHistoryExists = passwordHistoryService.isPasswordHistoryExists(i, emailAndPasswordVM.getPassword(), 
-    						emailAndPasswordVM.getEmail(), currentPassword);
-    				if (!isPasswordHistoryExists) {
-        				// TODO
-    					System.out.println("===OK===");
-    				} else {
-    					System.out.println("===NOT OK===");
-    					checkPasswordExist = true;
-    					break;
-    				}
+    				if (checkPasswordExist) {
+        				return new ResponseEntity<>("PASSWORD EXIST", HttpStatus.BAD_REQUEST);
+        			} else {
+        				userService.changePasswordByUserEmail(user.get().getEmail(), emailAndPasswordVM.getPassword());
+        				return new ResponseEntity<>("OK", HttpStatus.OK);
+        			}
     			}
-    			return new ResponseEntity<>(HttpStatus.OK);
+    			return new ResponseEntity<>("OK", HttpStatus.OK);
     		} else {
-    			Boolean isPasswordHistoryExists = passwordHistoryService.isPasswordHistoryExists(0, emailAndPasswordVM.getPassword(), 
+    			isPasswordHistoryExists = passwordHistoryService.isPasswordHistoryExists(0, emailAndPasswordVM.getPassword(), 
     					user.get().getEmail(), currentPassword);
     			if (!isPasswordHistoryExists) {
     				PasswordHistoryDTO phDTO = new PasswordHistoryDTO();
@@ -242,7 +298,7 @@ public class AccountResource {
     				return new ResponseEntity<>("PASSWORD EXIST", HttpStatus.BAD_REQUEST);
     			} else {
     				userService.changePasswordByUserEmail(user.get().getEmail(), emailAndPasswordVM.getPassword());
-    				return new ResponseEntity<>(HttpStatus.OK);
+    				return new ResponseEntity<>("OK", HttpStatus.OK);
     			}
     		}
     	} else {
