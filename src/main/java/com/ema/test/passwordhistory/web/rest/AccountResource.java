@@ -187,26 +187,36 @@ public class AccountResource {
     		if (passwordHistoryDTO.isPresent()) {
     			// Loop for every history
     			for (int i = 0; i < 6; i++) {
-    				// TODO
-    				System.out.println(i + "===");
+    				System.out.print(i + "===");
     				switch (i) {
 	    				case 1:
-	    					System.out.print(passwordHistoryDTO.get().getHistoryNo1());
+	    					System.out.println(passwordHistoryDTO.get().getHistoryNo1());
 	    					break;
 	    				case 2:
-	    					System.out.print(passwordHistoryDTO.get().getHistoryNo2());
+	    					System.out.println(passwordHistoryDTO.get().getHistoryNo2());
 	    					break;
 	    				case 3:
-	    					System.out.print(passwordHistoryDTO.get().getHistoryNo3());
+	    					System.out.println(passwordHistoryDTO.get().getHistoryNo3());
 	    					break;
 	    				case 4:
-	    					System.out.print(passwordHistoryDTO.get().getHistoryNo4());
+	    					System.out.println(passwordHistoryDTO.get().getHistoryNo4());
 	    					break;
 	    				case 5:
-	    					System.out.print(passwordHistoryDTO.get().getHistoryNo5());
+	    					System.out.println(passwordHistoryDTO.get().getHistoryNo5());
 	    					break;
     					default:
+    						System.out.println(currentPassword);
     						break;
+    				}
+    				Boolean isPasswordHistoryExists = passwordHistoryService.isPasswordHistoryExists(i, emailAndPasswordVM.getPassword(), 
+    						emailAndPasswordVM.getEmail(), currentPassword);
+    				if (!isPasswordHistoryExists) {
+        				// TODO
+    					System.out.println("===OK===");
+    				} else {
+    					System.out.println("===NOT OK===");
+    					checkPasswordExist = true;
+    					break;
     				}
     			}
     			return new ResponseEntity<>(HttpStatus.OK);
@@ -225,7 +235,7 @@ public class AccountResource {
     			if (checkPasswordExist) {
     				return new ResponseEntity<>("PASSWORD EXIST", HttpStatus.BAD_REQUEST);
     			} else {
-    				userService.changePassword(emailAndPasswordVM.getPassword());
+    				userService.changePasswordByUserEmail(user.get().getEmail(), emailAndPasswordVM.getPassword());
     				return new ResponseEntity<>(HttpStatus.OK);
     			}
     		}

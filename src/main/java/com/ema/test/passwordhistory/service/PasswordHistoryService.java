@@ -121,37 +121,64 @@ public class PasswordHistoryService {
     	log.debug("Request to get PasswordHistory : {}", historyNo + ": Password: " + password + " Email: " + email);
     	String encryptedPassword = passwordEncoder.encode(password);
     	Optional<PasswordHistory> result = null;
+    	Boolean output = false;
     	switch (historyNo) {
     		case 1:
     			result = passwordHistoryRepository.findOneByHistoryNo1AndUserEmail(encryptedPassword, email);
+    			if (passwordEncoder.matches(password, result.get().getHistoryNo1())) {
+    				System.out.println("HISTORY NO. 1 MATCHES");
+    				output = true;
+    			} else {
+    				System.out.println("HISTORY NO. 1 NOT MATCHES");
+    			}
     			break;
     		case 2:
     			result = passwordHistoryRepository.findOneByHistoryNo2AndUserEmail(encryptedPassword, email);
+    			if (passwordEncoder.matches(password, result.get().getHistoryNo2())) {
+    				System.out.println("HISTORY NO. 2 MATCHES");
+    				output = true;
+    			} else {
+    				System.out.println("HISTORY NO. 2 NOT MATCHES");
+    			}
     			break;
     		case 3:
     			result = passwordHistoryRepository.findOneByHistoryNo3AndUserEmail(encryptedPassword, email);
+    			if (passwordEncoder.matches(password, result.get().getHistoryNo3())) {
+    				System.out.println("HISTORY NO. 3 MATCHES");
+    				output = true;
+    			} else {
+    				System.out.println("HISTORY NO. 3 NOT MATCHES");
+    			}
     			break;
     		case 4:
     			result = passwordHistoryRepository.findOneByHistoryNo4AndUserEmail(encryptedPassword, email);
+    			if (passwordEncoder.matches(password, result.get().getHistoryNo4())) {
+    				System.out.println("HISTORY NO. 4 MATCHES");
+    				output = true;    				
+    			} else {
+    				System.out.println("HISTORY NO. 4 NOT MATCHES");
+    			}
     			break;
     		case 5:
     			result = passwordHistoryRepository.findOneByHistoryNo5AndUserEmail(encryptedPassword, email);
+    			if (passwordEncoder.matches(password, result.get().getHistoryNo5())) {
+    				System.out.println("HISTORY NO. 5 MATCHES");
+    				output = true;
+    			} else {
+    				System.out.println("HISTORY NO. 5 NOT MATCHES");
+    			}
     			break;
     		default:
-    			// Check with current password    			
+    			// Check with current password
+    			if (passwordEncoder.matches(password, currentPassword)) {
+    				System.out.println("CURRENT PASSWORD MATCHES");
+    				output = true;
+    			} else {
+    				System.out.println("CURRENT PASSWORD NOT MATCHES");
+    			}
     			break;    			
     	}
-    	if (historyNo == 0) {
-    		if (passwordEncoder.matches(password, currentPassword)) 
-				return true;
-			else 
-				return false;			
-    	} else {
-	    	if (result.isPresent()) 
-	    		return true;
-	    	else 
-	    		return false;	    	
-    	}
+    	return output;
     }
     
 }
