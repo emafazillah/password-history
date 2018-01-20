@@ -117,14 +117,14 @@ public class PasswordHistoryService {
     }
     
     @Transactional(readOnly = true)
-    public Boolean isPasswordHistoryExists(Integer historyNo, String password, String email, String currentPassword) {
-    	log.debug("Request to get PasswordHistory : {}", historyNo + ": Password: " + password + " Email: " + email);
+    public Boolean isPasswordHistoryExists(String password, String currentPassword) {
+    	log.debug("Request to get PasswordHistory : {}", "Password: " + password + ", Current Password: " + currentPassword);
     	Boolean output = false;
     	if (passwordEncoder.matches(password, currentPassword)) {
-    		log.debug("HISTORY NO. " + historyNo + " PASSWORD MATCHES");
+    		log.debug("PASSWORD MATCHES");
 			output = true;
 		} else {
-			log.debug("HISTORY NO. " + historyNo + " PASSWORD NOT MATCHES");
+			log.debug("PASSWORD NOT MATCHES");
 		}
     	return output;
     }
