@@ -110,6 +110,13 @@ public class PasswordHistoryService {
     }
     
     @Transactional(readOnly = true)
+    public Optional<PasswordHistoryDTO> findOneByUserEmail(String email) {
+    	log.debug("Request to get existing password history", email);
+    	Optional<PasswordHistory> result = passwordHistoryRepository.findOneByUserEmail(email);
+    	return result.map(passwordHistoryMapper::toDto);
+    }
+    
+    @Transactional(readOnly = true)
     public Boolean isPasswordHistoryExists(Integer historyNo, String password, String email, String currentPassword) {
     	log.debug("Request to get PasswordHistory : {}", historyNo + ": Password: " + password + " Email: " + email);
     	String encryptedPassword = passwordEncoder.encode(password);
