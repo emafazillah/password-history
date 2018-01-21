@@ -188,24 +188,34 @@ public class AccountResource {
     			PasswordHistoryDTO phDTO = new PasswordHistoryDTO();
     			int countExisting = 0;
     			// Current password
-    			if (passwordHistoryService.isPasswordHistoryExists(emailAndPasswordVM.getPassword(), user.get().getPassword())) 
-    				countExisting++;
+    			String currentPassword = user.get().getPassword();
+    			if (passwordHistoryService.isPasswordHistoryExists(emailAndPasswordVM.getPassword(), currentPassword)) 
+    				countExisting++;    			
     			// History No 1
     			if (passwordHistoryService.isPasswordHistoryExists(emailAndPasswordVM.getPassword(), passwordHistoryDTO.get().getHistoryNo1())) 
     				countExisting++;
+    			else if ((passwordHistoryDTO.get().getHistoryNo1()).equals(null)) 
+    				phDTO.setHistoryNo1(currentPassword);
     			// History No 2
     			if (passwordHistoryService.isPasswordHistoryExists(emailAndPasswordVM.getPassword(), passwordHistoryDTO.get().getHistoryNo2())) 
     				countExisting++;
+    			else if ((passwordHistoryDTO.get().getHistoryNo2()).equals(null)) 
+    				phDTO.setHistoryNo2(currentPassword);
     			// History No 3
     			if (passwordHistoryService.isPasswordHistoryExists(emailAndPasswordVM.getPassword(), passwordHistoryDTO.get().getHistoryNo3())) 
     				countExisting++;
+    			else if ((passwordHistoryDTO.get().getHistoryNo3()).equals(null)) 
+    				phDTO.setHistoryNo3(currentPassword);
     			// History No 4
     			if (passwordHistoryService.isPasswordHistoryExists(emailAndPasswordVM.getPassword(), passwordHistoryDTO.get().getHistoryNo4())) 
     				countExisting++;
+    			else if ((passwordHistoryDTO.get().getHistoryNo4()).equals(null)) 
+    				phDTO.setHistoryNo4(currentPassword);
     			// History No 5
     			if (passwordHistoryService.isPasswordHistoryExists(emailAndPasswordVM.getPassword(), passwordHistoryDTO.get().getHistoryNo5())) 
     				countExisting++;
-    			// TODO
+    			else if ((passwordHistoryDTO.get().getHistoryNo5()).equals(null)) 
+    				phDTO.setHistoryNo5(currentPassword);
     			if (countExisting > 0)
     				checkPasswordExist = true;
     			if (checkPasswordExist) {
