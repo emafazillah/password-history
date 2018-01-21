@@ -15,11 +15,6 @@ import org.springframework.data.jpa.repository.*;
 @Repository
 public interface PasswordHistoryRepository extends JpaRepository<PasswordHistory,Long> {
 	
-	//Optional<PasswordHistory> findOneByHistoryNo1AndUserEmail(String encryptedPassword, String email);
-	//Optional<PasswordHistory> findOneByHistoryNo2AndUserEmail(String encryptedPassword, String email);
-	//Optional<PasswordHistory> findOneByHistoryNo3AndUserEmail(String encryptedPassword, String email);
-	//Optional<PasswordHistory> findOneByHistoryNo4AndUserEmail(String encryptedPassword, String email);
-	//Optional<PasswordHistory> findOneByHistoryNo5AndUserEmail(String encryptedPassword, String email);
 	Optional<PasswordHistory> findOneByUserEmail(String email);
     
 }
