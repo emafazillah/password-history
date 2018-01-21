@@ -235,6 +235,13 @@ public class AccountResource {
     				phDTO.setHistoryNo3(passwordHistoryDTO.get().getHistoryNo3());
     				phDTO.setHistoryNo4(passwordHistoryDTO.get().getHistoryNo4());
     				phDTO.setHistoryNo5(currentPassword);
+    			} else {
+    				// Rotate to right
+    				phDTO.setHistoryNo5(passwordHistoryDTO.get().getHistoryNo4());
+    				phDTO.setHistoryNo4(passwordHistoryDTO.get().getHistoryNo3());
+    				phDTO.setHistoryNo3(passwordHistoryDTO.get().getHistoryNo2());
+    				phDTO.setHistoryNo2(passwordHistoryDTO.get().getHistoryNo1());
+    				phDTO.setHistoryNo1(currentPassword);
     			}
     			if (countExisting > 0)
     				checkPasswordExist = true;
