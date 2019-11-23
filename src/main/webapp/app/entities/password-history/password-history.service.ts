@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
+import { SERVER_API_URL } from '../../app.constants';
 
 import { PasswordHistory } from './password-history.model';
 import { ResponseWrapper, createRequestOption } from '../../shared';
@@ -8,8 +9,8 @@ import { ResponseWrapper, createRequestOption } from '../../shared';
 @Injectable()
 export class PasswordHistoryService {
 
-    private resourceUrl = 'api/password-histories';
-    private resourceSearchUrl = 'api/_search/password-histories';
+    private resourceUrl = SERVER_API_URL + 'api/password-histories';
+    private resourceSearchUrl = SERVER_API_URL + 'api/_search/password-histories';
 
     constructor(private http: Http) { }
 
