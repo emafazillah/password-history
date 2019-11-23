@@ -158,7 +158,7 @@ public class PasswordHistoryResourceIntTest {
             .content(TestUtil.convertObjectToJsonBytes(passwordHistoryDTO)))
             .andExpect(status().isBadRequest());
 
-        // Validate the Alice in the database
+        // Validate the PasswordHistory in the database
         List<PasswordHistory> passwordHistoryList = passwordHistoryRepository.findAll();
         assertThat(passwordHistoryList).hasSize(databaseSizeBeforeCreate);
     }
