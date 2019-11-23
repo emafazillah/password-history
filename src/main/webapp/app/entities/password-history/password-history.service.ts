@@ -1,80 +1,44 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
-import { SERVER_API_URL } from '../../app.constants';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-import { PasswordHistory } from './password-history.model';
-import { ResponseWrapper, createRequestOption } from '../../shared';
+import { SERVER_API_URL } from 'app/app.constants';
+import { createRequestOption } from 'app/shared/util/request-util';
+import { IPasswordHistory } from 'app/shared/model/password-history.model';
 
-@Injectable()
+type EntityResponseType = HttpResponse<IPasswordHistory>;
+type EntityArrayResponseType = HttpResponse<IPasswordHistory[]>;
+
+@Injectable({ providedIn: 'root' })
 export class PasswordHistoryService {
+  public resourceUrl = SERVER_API_URL + 'api/password-histories';
+  public resourceSearchUrl = SERVER_API_URL + 'api/_search/password-histories';
 
-    private resourceUrl = SERVER_API_URL + 'api/password-histories';
-    private resourceSearchUrl = SERVER_API_URL + 'api/_search/password-histories';
+  constructor(protected http: HttpClient) {}
 
-    constructor(private http: Http) { }
+  create(passwordHistory: IPasswordHistory): Observable<EntityResponseType> {
+    return this.http.post<IPasswordHistory>(this.resourceUrl, passwordHistory, { observe: 'response' });
+  }
 
-    create(passwordHistory: PasswordHistory): Observable<PasswordHistory> {
-        const copy = this.convert(passwordHistory);
-        return this.http.post(this.resourceUrl, copy).map((res: Response) => {
-            const jsonResponse = res.json();
-            return this.convertItemFromServer(jsonResponse);
-        });
-    }
+  update(passwordHistory: IPasswordHistory): Observable<EntityResponseType> {
+    return this.http.put<IPasswordHistory>(this.resourceUrl, passwordHistory, { observe: 'response' });
+  }
 
-    update(passwordHistory: PasswordHistory): Observable<PasswordHistory> {
-        const copy = this.convert(passwordHistory);
-        return this.http.put(this.resourceUrl, copy).map((res: Response) => {
-            const jsonResponse = res.json();
-            return this.convertItemFromServer(jsonResponse);
-        });
-    }
+  find(id: number): Observable<EntityResponseType> {
+    return this.http.get<IPasswordHistory>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  }
 
-    find(id: number): Observable<PasswordHistory> {
-        return this.http.get(`${this.resourceUrl}/${id}`).map((res: Response) => {
-            const jsonResponse = res.json();
-            return this.convertItemFromServer(jsonResponse);
-        });
-    }
+  query(req?: any): Observable<EntityArrayResponseType> {
+    const options = createRequestOption(req);
+    return this.http.get<IPasswordHistory[]>(this.resourceUrl, { params: options, observe: 'response' });
+  }
 
-    query(req?: any): Observable<ResponseWrapper> {
-        const options = createRequestOption(req);
-        return this.http.get(this.resourceUrl, options)
-            .map((res: Response) => this.convertResponse(res));
-    }
+  delete(id: number): Observable<HttpResponse<any>> {
+    return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  }
 
-    delete(id: number): Observable<Response> {
-        return this.http.delete(`${this.resourceUrl}/${id}`);
-    }
-
-    search(req?: any): Observable<ResponseWrapper> {
-        const options = createRequestOption(req);
-        return this.http.get(this.resourceSearchUrl, options)
-            .map((res: any) => this.convertResponse(res));
-    }
-
-    private convertResponse(res: Response): ResponseWrapper {
-        const jsonResponse = res.json();
-        const result = [];
-        for (let i = 0; i < jsonResponse.length; i++) {
-            result.push(this.convertItemFromServer(jsonResponse[i]));
-        }
-        return new ResponseWrapper(res.headers, result, res.status);
-    }
-
-    /**
-     * Convert a returned JSON object to PasswordHistory.
-     */
-    private convertItemFromServer(json: any): PasswordHistory {
-        const entity: PasswordHistory = Object.assign(new PasswordHistory(), json);
-        return entity;
-    }
-
-    /**
-     * Convert a PasswordHistory to a JSON which can be sent to the server.
-     */
-    private convert(passwordHistory: PasswordHistory): PasswordHistory {
-        const copy: PasswordHistory = Object.assign({}, passwordHistory);
-        return copy;
-    }
+  search(req?: any): Observable<EntityArrayResponseType> {
+    const options = createRequestOption(req);
+    return this.http.get<IPasswordHistory[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
+  }
 }

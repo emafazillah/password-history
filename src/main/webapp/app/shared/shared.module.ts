@@ -1,49 +1,14 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { DatePipe } from '@angular/common';
-
-import {
-    PasswordhistorySharedLibsModule,
-    PasswordhistorySharedCommonModule,
-    CSRFService,
-    AuthServerProvider,
-    AccountService,
-    UserService,
-    StateStorageService,
-    LoginService,
-    LoginModalService,
-    Principal,
-    HasAnyAuthorityDirective,
-    JhiLoginModalComponent
-} from './';
+import { NgModule } from '@angular/core';
+import { PasswordhistorySharedLibsModule } from './shared-libs.module';
+import { JhiAlertComponent } from './alert/alert.component';
+import { JhiAlertErrorComponent } from './alert/alert-error.component';
+import { JhiLoginModalComponent } from './login/login.component';
+import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
 
 @NgModule({
-    imports: [
-        PasswordhistorySharedLibsModule,
-        PasswordhistorySharedCommonModule
-    ],
-    declarations: [
-        JhiLoginModalComponent,
-        HasAnyAuthorityDirective
-    ],
-    providers: [
-        LoginService,
-        LoginModalService,
-        AccountService,
-        StateStorageService,
-        Principal,
-        CSRFService,
-        AuthServerProvider,
-        UserService,
-        DatePipe
-    ],
-    entryComponents: [JhiLoginModalComponent],
-    exports: [
-        PasswordhistorySharedCommonModule,
-        JhiLoginModalComponent,
-        HasAnyAuthorityDirective,
-        DatePipe
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
-
+  imports: [PasswordhistorySharedLibsModule],
+  declarations: [JhiAlertComponent, JhiAlertErrorComponent, JhiLoginModalComponent, HasAnyAuthorityDirective],
+  entryComponents: [JhiLoginModalComponent],
+  exports: [PasswordhistorySharedLibsModule, JhiAlertComponent, JhiAlertErrorComponent, JhiLoginModalComponent, HasAnyAuthorityDirective]
 })
 export class PasswordhistorySharedModule {}

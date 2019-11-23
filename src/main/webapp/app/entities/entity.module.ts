@@ -1,16 +1,15 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-
-import { PasswordhistoryPasswordHistoryModule } from './password-history/password-history.module';
-/* jhipster-needle-add-entity-module-import - JHipster will add entity modules imports here */
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
-    imports: [
-        PasswordhistoryPasswordHistoryModule,
-        /* jhipster-needle-add-entity-module - JHipster will add entity modules here */
-    ],
-    declarations: [],
-    entryComponents: [],
-    providers: [],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  imports: [
+    RouterModule.forChild([
+      {
+        path: 'password-history',
+        loadChildren: () => import('./password-history/password-history.module').then(m => m.PasswordhistoryPasswordHistoryModule)
+      }
+      /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
+    ])
+  ]
 })
 export class PasswordhistoryEntityModule {}

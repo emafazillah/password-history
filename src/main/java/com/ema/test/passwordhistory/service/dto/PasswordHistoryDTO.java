@@ -1,13 +1,9 @@
 package com.ema.test.passwordhistory.service.dto;
-
-
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 /**
- * A DTO for the PasswordHistory entity.
+ * A DTO for the {@link com.ema.test.passwordhistory.domain.PasswordHistory} entity.
  */
 public class PasswordHistoryDTO implements Serializable {
 
@@ -22,6 +18,7 @@ public class PasswordHistoryDTO implements Serializable {
     private String history_no4;
 
     private String history_no5;
+
 
     private Long userId;
 
@@ -101,7 +98,7 @@ public class PasswordHistoryDTO implements Serializable {
         }
 
         PasswordHistoryDTO passwordHistoryDTO = (PasswordHistoryDTO) o;
-        if(passwordHistoryDTO.getId() == null || getId() == null) {
+        if (passwordHistoryDTO.getId() == null || getId() == null) {
             return false;
         }
         return Objects.equals(getId(), passwordHistoryDTO.getId());
@@ -121,6 +118,8 @@ public class PasswordHistoryDTO implements Serializable {
             ", history_no3='" + getHistory_no3() + "'" +
             ", history_no4='" + getHistory_no4() + "'" +
             ", history_no5='" + getHistory_no5() + "'" +
+            ", user=" + getUserId() +
+            ", user='" + getUserLogin() + "'" +
             "}";
     }
 }

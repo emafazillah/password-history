@@ -1,82 +1,78 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes, CanActivate } from '@angular/router';
-
-import { UserRouteAccessService } from '../../shared';
-import { JhiPaginationUtil } from 'ng-jhipster';
-
+import { HttpResponse } from '@angular/common/http';
+import { Resolve, ActivatedRouteSnapshot, Routes } from '@angular/router';
+import { JhiResolvePagingParams } from 'ng-jhipster';
+import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { PasswordHistory } from 'app/shared/model/password-history.model';
+import { PasswordHistoryService } from './password-history.service';
 import { PasswordHistoryComponent } from './password-history.component';
 import { PasswordHistoryDetailComponent } from './password-history-detail.component';
-import { PasswordHistoryPopupComponent } from './password-history-dialog.component';
-import { PasswordHistoryDeletePopupComponent } from './password-history-delete-dialog.component';
+import { PasswordHistoryUpdateComponent } from './password-history-update.component';
+import { IPasswordHistory } from 'app/shared/model/password-history.model';
 
-@Injectable()
-export class PasswordHistoryResolvePagingParams implements Resolve<any> {
+@Injectable({ providedIn: 'root' })
+export class PasswordHistoryResolve implements Resolve<IPasswordHistory> {
+  constructor(private service: PasswordHistoryService) {}
 
-    constructor(private paginationUtil: JhiPaginationUtil) {}
-
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        const page = route.queryParams['page'] ? route.queryParams['page'] : '1';
-        const sort = route.queryParams['sort'] ? route.queryParams['sort'] : 'id,asc';
-        return {
-            page: this.paginationUtil.parsePage(page),
-            predicate: this.paginationUtil.parsePredicate(sort),
-            ascending: this.paginationUtil.parseAscending(sort)
-      };
+  resolve(route: ActivatedRouteSnapshot): Observable<IPasswordHistory> {
+    const id = route.params['id'];
+    if (id) {
+      return this.service.find(id).pipe(map((passwordHistory: HttpResponse<PasswordHistory>) => passwordHistory.body));
     }
+    return of(new PasswordHistory());
+  }
 }
 
 export const passwordHistoryRoute: Routes = [
-    {
-        path: 'password-history',
-        component: PasswordHistoryComponent,
-        resolve: {
-            'pagingParams': PasswordHistoryResolvePagingParams
-        },
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'PasswordHistories'
-        },
-        canActivate: [UserRouteAccessService]
-    }, {
-        path: 'password-history/:id',
-        component: PasswordHistoryDetailComponent,
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'PasswordHistories'
-        },
-        canActivate: [UserRouteAccessService]
-    }
-];
-
-export const passwordHistoryPopupRoute: Routes = [
-    {
-        path: 'password-history-new',
-        component: PasswordHistoryPopupComponent,
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'PasswordHistories'
-        },
-        canActivate: [UserRouteAccessService],
-        outlet: 'popup'
+  {
+    path: '',
+    component: PasswordHistoryComponent,
+    resolve: {
+      pagingParams: JhiResolvePagingParams
     },
-    {
-        path: 'password-history/:id/edit',
-        component: PasswordHistoryPopupComponent,
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'PasswordHistories'
-        },
-        canActivate: [UserRouteAccessService],
-        outlet: 'popup'
+    data: {
+      authorities: ['ROLE_USER'],
+      defaultSort: 'id,asc',
+      pageTitle: 'PasswordHistories'
     },
-    {
-        path: 'password-history/:id/delete',
-        component: PasswordHistoryDeletePopupComponent,
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'PasswordHistories'
-        },
-        canActivate: [UserRouteAccessService],
-        outlet: 'popup'
-    }
+    canActivate: [UserRouteAccessService]
+  },
+  {
+    path: ':id/view',
+    component: PasswordHistoryDetailComponent,
+    resolve: {
+      passwordHistory: PasswordHistoryResolve
+    },
+    data: {
+      authorities: ['ROLE_USER'],
+      pageTitle: 'PasswordHistories'
+    },
+    canActivate: [UserRouteAccessService]
+  },
+  {
+    path: 'new',
+    component: PasswordHistoryUpdateComponent,
+    resolve: {
+      passwordHistory: PasswordHistoryResolve
+    },
+    data: {
+      authorities: ['ROLE_USER'],
+      pageTitle: 'PasswordHistories'
+    },
+    canActivate: [UserRouteAccessService]
+  },
+  {
+    path: ':id/edit',
+    component: PasswordHistoryUpdateComponent,
+    resolve: {
+      passwordHistory: PasswordHistoryResolve
+    },
+    data: {
+      authorities: ['ROLE_USER'],
+      pageTitle: 'PasswordHistories'
+    },
+    canActivate: [UserRouteAccessService]
+  }
 ];

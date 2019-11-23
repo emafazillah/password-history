@@ -1,22 +1,12 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { PasswordhistorySharedModule } from '../shared';
-
-import { HOME_ROUTE, HomeComponent } from './';
+import { PasswordhistorySharedModule } from 'app/shared/shared.module';
+import { HOME_ROUTE } from './home.route';
+import { HomeComponent } from './home.component';
 
 @NgModule({
-    imports: [
-        PasswordhistorySharedModule,
-        RouterModule.forRoot([ HOME_ROUTE ], { useHash: true })
-    ],
-    declarations: [
-        HomeComponent,
-    ],
-    entryComponents: [
-    ],
-    providers: [
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  imports: [PasswordhistorySharedModule, RouterModule.forChild([HOME_ROUTE])],
+  declarations: [HomeComponent]
 })
 export class PasswordhistoryHomeModule {}

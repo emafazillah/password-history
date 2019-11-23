@@ -1,54 +1,30 @@
-import './vendor.ts';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { Ng2Webstorage } from 'ng2-webstorage';
 
-import { PasswordhistorySharedModule, UserRouteAccessService } from './shared';
+import './vendor';
+import { PasswordhistorySharedModule } from 'app/shared/shared.module';
+import { PasswordhistoryCoreModule } from 'app/core/core.module';
+import { PasswordhistoryAppRoutingModule } from './app-routing.module';
 import { PasswordhistoryHomeModule } from './home/home.module';
-import { PasswordhistoryAdminModule } from './admin/admin.module';
-import { PasswordhistoryAccountModule } from './account/account.module';
 import { PasswordhistoryEntityModule } from './entities/entity.module';
-
-import { customHttpProvider } from './blocks/interceptor/http.provider';
-import { PaginationConfig } from './blocks/config/uib-pagination.config';
-
 // jhipster-needle-angular-add-module-import JHipster will add new module here
-
-import {
-    JhiMainComponent,
-    LayoutRoutingModule,
-    NavbarComponent,
-    FooterComponent,
-    ProfileService,
-    PageRibbonComponent,
-    ErrorComponent
-} from './layouts';
+import { JhiMainComponent } from './layouts/main/main.component';
+import { NavbarComponent } from './layouts/navbar/navbar.component';
+import { FooterComponent } from './layouts/footer/footer.component';
+import { PageRibbonComponent } from './layouts/profiles/page-ribbon.component';
+import { ErrorComponent } from './layouts/error/error.component';
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        LayoutRoutingModule,
-        Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-'}),
-        PasswordhistorySharedModule,
-        PasswordhistoryHomeModule,
-        PasswordhistoryAdminModule,
-        PasswordhistoryAccountModule,
-        PasswordhistoryEntityModule,
-        // jhipster-needle-angular-add-module JHipster will add new module here
-    ],
-    declarations: [
-        JhiMainComponent,
-        NavbarComponent,
-        ErrorComponent,
-        PageRibbonComponent,
-        FooterComponent
-    ],
-    providers: [
-        ProfileService,
-        customHttpProvider(),
-        PaginationConfig,
-        UserRouteAccessService
-    ],
-    bootstrap: [ JhiMainComponent ]
+  imports: [
+    BrowserModule,
+    PasswordhistorySharedModule,
+    PasswordhistoryCoreModule,
+    PasswordhistoryHomeModule,
+    // jhipster-needle-angular-add-module JHipster will add new module here
+    PasswordhistoryEntityModule,
+    PasswordhistoryAppRoutingModule
+  ],
+  declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, FooterComponent],
+  bootstrap: [JhiMainComponent]
 })
 export class PasswordhistoryAppModule {}

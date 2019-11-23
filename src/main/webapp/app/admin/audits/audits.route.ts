@@ -1,11 +1,16 @@
 import { Route } from '@angular/router';
+import { JhiResolvePagingParams } from 'ng-jhipster';
 
 import { AuditsComponent } from './audits.component';
 
 export const auditsRoute: Route = {
-    path: 'audits',
-    component: AuditsComponent,
-    data: {
-        pageTitle: 'Audits'
-    }
+  path: '',
+  component: AuditsComponent,
+  resolve: {
+    pagingParams: JhiResolvePagingParams
+  },
+  data: {
+    pageTitle: 'Audits',
+    defaultSort: 'auditEventDate,desc'
+  }
 };
