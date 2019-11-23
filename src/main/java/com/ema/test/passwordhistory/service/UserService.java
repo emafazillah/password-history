@@ -82,7 +82,7 @@ public class UserService {
     }
 
     public Optional<User> requestPasswordReset(String mail) {
-        return userRepository.findOneByEmail(mail)
+        return userRepository.findOneByEmailIgnoreCase(mail)
             .filter(User::getActivated)
             .map(user -> {
                 user.setResetKey(RandomUtil.generateResetKey());
@@ -127,7 +127,7 @@ public class UserService {
         user.setEmail(userDTO.getEmail());
         user.setImageUrl(userDTO.getImageUrl());
         if (userDTO.getLangKey() == null) {
-            user.setLangKey("en"); // default language
+            user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
         } else {
             user.setLangKey(userDTO.getLangKey());
         }
@@ -220,7 +220,7 @@ public class UserService {
     }
     
     public void changePasswordByUserEmail(String email, String password) {
-    	userRepository.findOneByEmail(email).ifPresent(user -> {
+    	userRepository.findOneByEmailIgnoreCase(email).ifPresent(user -> {
     		String encryptedPassword = passwordEncoder.encode(password);
             user.setPassword(encryptedPassword);
             log.debug("Changed password for User: {}", user);

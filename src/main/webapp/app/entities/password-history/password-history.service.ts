@@ -17,20 +17,23 @@ export class PasswordHistoryService {
     create(passwordHistory: PasswordHistory): Observable<PasswordHistory> {
         const copy = this.convert(passwordHistory);
         return this.http.post(this.resourceUrl, copy).map((res: Response) => {
-            return res.json();
+            const jsonResponse = res.json();
+            return this.convertItemFromServer(jsonResponse);
         });
     }
 
     update(passwordHistory: PasswordHistory): Observable<PasswordHistory> {
         const copy = this.convert(passwordHistory);
         return this.http.put(this.resourceUrl, copy).map((res: Response) => {
-            return res.json();
+            const jsonResponse = res.json();
+            return this.convertItemFromServer(jsonResponse);
         });
     }
 
     find(id: number): Observable<PasswordHistory> {
         return this.http.get(`${this.resourceUrl}/${id}`).map((res: Response) => {
-            return res.json();
+            const jsonResponse = res.json();
+            return this.convertItemFromServer(jsonResponse);
         });
     }
 
@@ -52,9 +55,24 @@ export class PasswordHistoryService {
 
     private convertResponse(res: Response): ResponseWrapper {
         const jsonResponse = res.json();
-        return new ResponseWrapper(res.headers, jsonResponse, res.status);
+        const result = [];
+        for (let i = 0; i < jsonResponse.length; i++) {
+            result.push(this.convertItemFromServer(jsonResponse[i]));
+        }
+        return new ResponseWrapper(res.headers, result, res.status);
     }
 
+    /**
+     * Convert a returned JSON object to PasswordHistory.
+     */
+    private convertItemFromServer(json: any): PasswordHistory {
+        const entity: PasswordHistory = Object.assign(new PasswordHistory(), json);
+        return entity;
+    }
+
+    /**
+     * Convert a PasswordHistory to a JSON which can be sent to the server.
+     */
     private convert(passwordHistory: PasswordHistory): PasswordHistory {
         const copy: PasswordHistory = Object.assign({}, passwordHistory);
         return copy;

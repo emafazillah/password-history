@@ -74,7 +74,7 @@ public class AccountResource {
         }
         return userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase())
             .map(user -> new ResponseEntity<>("login already in use", textPlainHeaders, HttpStatus.BAD_REQUEST))
-            .orElseGet(() -> userRepository.findOneByEmail(managedUserVM.getEmail())
+            .orElseGet(() -> userRepository.findOneByEmailIgnoreCase(managedUserVM.getEmail())
                 .map(user -> new ResponseEntity<>("email address already in use", textPlainHeaders, HttpStatus.BAD_REQUEST))
                 .orElseGet(() -> {
                     User user = userService
@@ -139,7 +139,7 @@ public class AccountResource {
     @Timed
     public ResponseEntity saveAccount(@Valid @RequestBody UserDTO userDTO) {
         final String userLogin = SecurityUtils.getCurrentUserLogin();
-        Optional<User> existingUser = userRepository.findOneByEmail(userDTO.getEmail());
+        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("user-management", "emailexists", "Email already in use")).body(null);
         }
@@ -159,12 +159,8 @@ public class AccountResource {
      * @param password the new password
      * @return the ResponseEntity with status 200 (OK), or status 400 (Bad Request) if the new password is not strong enough
      */
-<<<<<<< HEAD
     /* Original
     @PostMapping(path = "/account/change_password",
-=======
-    @PostMapping(path = "/account/change-password",
->>>>>>> jhipster_upgrade
         produces = MediaType.TEXT_PLAIN_VALUE)
     @Timed
     public ResponseEntity changePassword(@RequestBody String password) {
@@ -183,7 +179,7 @@ public class AccountResource {
             return new ResponseEntity<>(CHECK_ERROR_MESSAGE, HttpStatus.BAD_REQUEST);
         }
         // Check password history
-    	Optional<User> user = userRepository.findOneByEmail(emailAndPasswordVM.getEmail());
+    	Optional<User> user = userRepository.findOneByEmailIgnoreCase(emailAndPasswordVM.getEmail());
     	if (user.isPresent()) {
     		Boolean checkPasswordExist = false;
     		Optional<PasswordHistoryDTO> passwordHistoryDTO = passwordHistoryService.findOneByUserEmail(user.get().getEmail());
