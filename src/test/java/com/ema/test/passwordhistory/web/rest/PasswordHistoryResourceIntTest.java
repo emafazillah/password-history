@@ -87,7 +87,7 @@ public class PasswordHistoryResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        PasswordHistoryResource passwordHistoryResource = new PasswordHistoryResource(passwordHistoryService);
+        final PasswordHistoryResource passwordHistoryResource = new PasswordHistoryResource(passwordHistoryService);
         this.restPasswordHistoryMockMvc = MockMvcBuilders.standaloneSetup(passwordHistoryResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
