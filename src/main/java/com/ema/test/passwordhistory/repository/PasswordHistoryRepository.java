@@ -13,8 +13,6 @@ import org.springframework.data.jpa.repository.*;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface PasswordHistoryRepository extends JpaRepository<PasswordHistory,Long> {
-	
-	Optional<PasswordHistory> findOneByUserEmail(String email);
-    
+public interface PasswordHistoryRepository extends JpaRepository<PasswordHistory,Long> {	
+	Optional<PasswordHistory> findOneByUserEmail(String email);    
 }

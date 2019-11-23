@@ -3,7 +3,7 @@
     "promptValues": {
       "packageName": "com.ema.test.passwordhistory"
     },
-    "jhipsterVersion": "4.6.2",
+    "jhipsterVersion": "4.7.0",
     "baseName": "passwordhistory",
     "packageName": "com.ema.test.passwordhistory",
     "packageFolder": "com/ema/test/passwordhistory",
