@@ -29,6 +29,7 @@ public class PasswordHistoryService {
     private final PasswordHistoryMapper passwordHistoryMapper;
 
     private final PasswordHistorySearchRepository passwordHistorySearchRepository;
+
     public PasswordHistoryService(PasswordHistoryRepository passwordHistoryRepository, PasswordHistoryMapper passwordHistoryMapper, PasswordHistorySearchRepository passwordHistorySearchRepository) {
         this.passwordHistoryRepository = passwordHistoryRepository;
         this.passwordHistoryMapper = passwordHistoryMapper;
