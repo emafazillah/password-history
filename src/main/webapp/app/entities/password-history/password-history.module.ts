@@ -1,53 +1,21 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { PasswordhistorySharedModule } from '../../shared';
-import { PasswordhistoryAdminModule } from '../../admin/admin.module';
-import {
-    PasswordHistoryService,
-    PasswordHistoryPopupService,
-    PasswordHistoryComponent,
-    PasswordHistoryDetailComponent,
-    PasswordHistoryDialogComponent,
-    PasswordHistoryPopupComponent,
-    PasswordHistoryDeletePopupComponent,
-    PasswordHistoryDeleteDialogComponent,
-    passwordHistoryRoute,
-    passwordHistoryPopupRoute,
-    PasswordHistoryResolvePagingParams,
-} from './';
-
-const ENTITY_STATES = [
-    ...passwordHistoryRoute,
-    ...passwordHistoryPopupRoute,
-];
+import { PasswordhistorySharedModule } from 'app/shared/shared.module';
+import { PasswordHistoryComponent } from './password-history.component';
+import { PasswordHistoryDetailComponent } from './password-history-detail.component';
+import { PasswordHistoryUpdateComponent } from './password-history-update.component';
+import { PasswordHistoryDeleteDialogComponent } from './password-history-delete-dialog.component';
+import { passwordHistoryRoute } from './password-history.route';
 
 @NgModule({
-    imports: [
-        PasswordhistorySharedModule,
-        PasswordhistoryAdminModule,
-        RouterModule.forRoot(ENTITY_STATES, { useHash: true })
-    ],
-    declarations: [
-        PasswordHistoryComponent,
-        PasswordHistoryDetailComponent,
-        PasswordHistoryDialogComponent,
-        PasswordHistoryDeleteDialogComponent,
-        PasswordHistoryPopupComponent,
-        PasswordHistoryDeletePopupComponent,
-    ],
-    entryComponents: [
-        PasswordHistoryComponent,
-        PasswordHistoryDialogComponent,
-        PasswordHistoryPopupComponent,
-        PasswordHistoryDeleteDialogComponent,
-        PasswordHistoryDeletePopupComponent,
-    ],
-    providers: [
-        PasswordHistoryService,
-        PasswordHistoryPopupService,
-        PasswordHistoryResolvePagingParams,
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  imports: [PasswordhistorySharedModule, RouterModule.forChild(passwordHistoryRoute)],
+  declarations: [
+    PasswordHistoryComponent,
+    PasswordHistoryDetailComponent,
+    PasswordHistoryUpdateComponent,
+    PasswordHistoryDeleteDialogComponent
+  ],
+  entryComponents: [PasswordHistoryDeleteDialogComponent]
 })
 export class PasswordhistoryPasswordHistoryModule {}

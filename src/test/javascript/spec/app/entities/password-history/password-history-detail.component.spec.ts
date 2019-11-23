@@ -1,62 +1,39 @@
-/* tslint:disable max-line-length */
-import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing';
-import { OnInit } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs/Rx';
-import { JhiDateUtils, JhiDataUtils, JhiEventManager } from 'ng-jhipster';
+import { of } from 'rxjs';
+
 import { PasswordhistoryTestModule } from '../../../test.module';
-import { MockActivatedRoute } from '../../../helpers/mock-route.service';
-import { PasswordHistoryDetailComponent } from '../../../../../../main/webapp/app/entities/password-history/password-history-detail.component';
-import { PasswordHistoryService } from '../../../../../../main/webapp/app/entities/password-history/password-history.service';
-import { PasswordHistory } from '../../../../../../main/webapp/app/entities/password-history/password-history.model';
+import { PasswordHistoryDetailComponent } from 'app/entities/password-history/password-history-detail.component';
+import { PasswordHistory } from 'app/shared/model/password-history.model';
 
 describe('Component Tests', () => {
+  describe('PasswordHistory Management Detail Component', () => {
+    let comp: PasswordHistoryDetailComponent;
+    let fixture: ComponentFixture<PasswordHistoryDetailComponent>;
+    const route = ({ data: of({ passwordHistory: new PasswordHistory(123) }) } as any) as ActivatedRoute;
 
-    describe('PasswordHistory Management Detail Component', () => {
-        let comp: PasswordHistoryDetailComponent;
-        let fixture: ComponentFixture<PasswordHistoryDetailComponent>;
-        let service: PasswordHistoryService;
-
-        beforeEach(async(() => {
-            TestBed.configureTestingModule({
-                imports: [PasswordhistoryTestModule],
-                declarations: [PasswordHistoryDetailComponent],
-                providers: [
-                    JhiDateUtils,
-                    JhiDataUtils,
-                    DatePipe,
-                    {
-                        provide: ActivatedRoute,
-                        useValue: new MockActivatedRoute({id: 123})
-                    },
-                    PasswordHistoryService,
-                    JhiEventManager
-                ]
-            }).overrideTemplate(PasswordHistoryDetailComponent, '')
-            .compileComponents();
-        }));
-
-        beforeEach(() => {
-            fixture = TestBed.createComponent(PasswordHistoryDetailComponent);
-            comp = fixture.componentInstance;
-            service = fixture.debugElement.injector.get(PasswordHistoryService);
-        });
-
-        describe('OnInit', () => {
-            it('Should call load all on init', () => {
-            // GIVEN
-
-            spyOn(service, 'find').and.returnValue(Observable.of(new PasswordHistory(10)));
-
-            // WHEN
-            comp.ngOnInit();
-
-            // THEN
-            expect(service.find).toHaveBeenCalledWith(123);
-            expect(comp.passwordHistory).toEqual(jasmine.objectContaining({id: 10}));
-            });
-        });
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        imports: [PasswordhistoryTestModule],
+        declarations: [PasswordHistoryDetailComponent],
+        providers: [{ provide: ActivatedRoute, useValue: route }]
+      })
+        .overrideTemplate(PasswordHistoryDetailComponent, '')
+        .compileComponents();
+      fixture = TestBed.createComponent(PasswordHistoryDetailComponent);
+      comp = fixture.componentInstance;
     });
 
+    describe('OnInit', () => {
+      it('Should call load all on init', () => {
+        // GIVEN
+
+        // WHEN
+        comp.ngOnInit();
+
+        // THEN
+        expect(comp.passwordHistory).toEqual(jasmine.objectContaining({ id: 123 }));
+      });
+    });
+  });
 });
