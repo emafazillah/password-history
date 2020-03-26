@@ -8,17 +8,15 @@ import { IPasswordHistory } from 'app/shared/model/password-history.model';
   templateUrl: './password-history-detail.component.html'
 })
 export class PasswordHistoryDetailComponent implements OnInit {
-  passwordHistory: IPasswordHistory;
+  passwordHistory: IPasswordHistory | null = null;
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit() {
-    this.activatedRoute.data.subscribe(({ passwordHistory }) => {
-      this.passwordHistory = passwordHistory;
-    });
+  ngOnInit(): void {
+    this.activatedRoute.data.subscribe(({ passwordHistory }) => (this.passwordHistory = passwordHistory));
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 }

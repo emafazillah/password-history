@@ -12,7 +12,6 @@ type EntityArrayResponseType = HttpResponse<IPasswordHistory[]>;
 @Injectable({ providedIn: 'root' })
 export class PasswordHistoryService {
   public resourceUrl = SERVER_API_URL + 'api/password-histories';
-  public resourceSearchUrl = SERVER_API_URL + 'api/_search/password-histories';
 
   constructor(protected http: HttpClient) {}
 
@@ -33,12 +32,7 @@ export class PasswordHistoryService {
     return this.http.get<IPasswordHistory[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
-  delete(id: number): Observable<HttpResponse<any>> {
-    return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
-  }
-
-  search(req?: any): Observable<EntityArrayResponseType> {
-    const options = createRequestOption(req);
-    return this.http.get<IPasswordHistory[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
+  delete(id: number): Observable<HttpResponse<{}>> {
+    return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 }

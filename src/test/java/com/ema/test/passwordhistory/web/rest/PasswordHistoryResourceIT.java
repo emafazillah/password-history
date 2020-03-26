@@ -3,36 +3,23 @@ package com.ema.test.passwordhistory.web.rest;
 import com.ema.test.passwordhistory.PasswordhistoryApp;
 import com.ema.test.passwordhistory.domain.PasswordHistory;
 import com.ema.test.passwordhistory.repository.PasswordHistoryRepository;
-import com.ema.test.passwordhistory.repository.search.PasswordHistorySearchRepository;
-import com.ema.test.passwordhistory.service.PasswordHistoryService;
 import com.ema.test.passwordhistory.service.dto.PasswordHistoryDTO;
 import com.ema.test.passwordhistory.service.mapper.PasswordHistoryMapper;
-import com.ema.test.passwordhistory.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.Validator;
-
 import javax.persistence.EntityManager;
-import java.util.Collections;
 import java.util.List;
 
-import static com.ema.test.passwordhistory.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -40,6 +27,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link PasswordHistoryResource} REST controller.
  */
 @SpringBootTest(classes = PasswordhistoryApp.class)
+
+@AutoConfigureMockMvc
+@WithMockUser
 public class PasswordHistoryResourceIT {
 
     private static final String DEFAULT_HISTORY_NO_1 = "AAAAAAAAAA";
@@ -64,46 +54,12 @@ public class PasswordHistoryResourceIT {
     private PasswordHistoryMapper passwordHistoryMapper;
 
     @Autowired
-    private PasswordHistoryService passwordHistoryService;
-
-    /**
-     * This repository is mocked in the com.ema.test.passwordhistory.repository.search test package.
-     *
-     * @see com.ema.test.passwordhistory.repository.search.PasswordHistorySearchRepositoryMockConfiguration
-     */
-    @Autowired
-    private PasswordHistorySearchRepository mockPasswordHistorySearchRepository;
-
-    @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
-
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
-
-    @Autowired
     private EntityManager em;
 
     @Autowired
-    private Validator validator;
-
     private MockMvc restPasswordHistoryMockMvc;
 
     private PasswordHistory passwordHistory;
-
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        final PasswordHistoryResource passwordHistoryResource = new PasswordHistoryResource(passwordHistoryService);
-        this.restPasswordHistoryMockMvc = MockMvcBuilders.standaloneSetup(passwordHistoryResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator).build();
-    }
 
     /**
      * Create an entity for this test.
@@ -149,7 +105,7 @@ public class PasswordHistoryResourceIT {
         // Create the PasswordHistory
         PasswordHistoryDTO passwordHistoryDTO = passwordHistoryMapper.toDto(passwordHistory);
         restPasswordHistoryMockMvc.perform(post("/api/password-histories")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(passwordHistoryDTO)))
             .andExpect(status().isCreated());
 
@@ -162,9 +118,6 @@ public class PasswordHistoryResourceIT {
         assertThat(testPasswordHistory.getHistoryNo3()).isEqualTo(DEFAULT_HISTORY_NO_3);
         assertThat(testPasswordHistory.getHistoryNo4()).isEqualTo(DEFAULT_HISTORY_NO_4);
         assertThat(testPasswordHistory.getHistoryNo5()).isEqualTo(DEFAULT_HISTORY_NO_5);
-
-        // Validate the PasswordHistory in Elasticsearch
-        verify(mockPasswordHistorySearchRepository, times(1)).save(testPasswordHistory);
     }
 
     @Test
@@ -178,16 +131,13 @@ public class PasswordHistoryResourceIT {
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restPasswordHistoryMockMvc.perform(post("/api/password-histories")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(passwordHistoryDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the PasswordHistory in the database
         List<PasswordHistory> passwordHistoryList = passwordHistoryRepository.findAll();
         assertThat(passwordHistoryList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the PasswordHistory in Elasticsearch
-        verify(mockPasswordHistorySearchRepository, times(0)).save(passwordHistory);
     }
 
 
@@ -200,7 +150,7 @@ public class PasswordHistoryResourceIT {
         // Get all the passwordHistoryList
         restPasswordHistoryMockMvc.perform(get("/api/password-histories?sort=id,desc"))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(passwordHistory.getId().intValue())))
             .andExpect(jsonPath("$.[*].history_no1").value(hasItem(DEFAULT_HISTORY_NO_1)))
             .andExpect(jsonPath("$.[*].history_no2").value(hasItem(DEFAULT_HISTORY_NO_2)))
@@ -218,7 +168,7 @@ public class PasswordHistoryResourceIT {
         // Get the passwordHistory
         restPasswordHistoryMockMvc.perform(get("/api/password-histories/{id}", passwordHistory.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(passwordHistory.getId().intValue()))
             .andExpect(jsonPath("$.history_no1").value(DEFAULT_HISTORY_NO_1))
             .andExpect(jsonPath("$.history_no2").value(DEFAULT_HISTORY_NO_2))
@@ -256,7 +206,7 @@ public class PasswordHistoryResourceIT {
         PasswordHistoryDTO passwordHistoryDTO = passwordHistoryMapper.toDto(updatedPasswordHistory);
 
         restPasswordHistoryMockMvc.perform(put("/api/password-histories")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(passwordHistoryDTO)))
             .andExpect(status().isOk());
 
@@ -269,9 +219,6 @@ public class PasswordHistoryResourceIT {
         assertThat(testPasswordHistory.getHistoryNo3()).isEqualTo(UPDATED_HISTORY_NO_3);
         assertThat(testPasswordHistory.getHistoryNo4()).isEqualTo(UPDATED_HISTORY_NO_4);
         assertThat(testPasswordHistory.getHistoryNo5()).isEqualTo(UPDATED_HISTORY_NO_5);
-
-        // Validate the PasswordHistory in Elasticsearch
-        verify(mockPasswordHistorySearchRepository, times(1)).save(testPasswordHistory);
     }
 
     @Test
@@ -284,16 +231,13 @@ public class PasswordHistoryResourceIT {
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restPasswordHistoryMockMvc.perform(put("/api/password-histories")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(passwordHistoryDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the PasswordHistory in the database
         List<PasswordHistory> passwordHistoryList = passwordHistoryRepository.findAll();
         assertThat(passwordHistoryList).hasSize(databaseSizeBeforeUpdate);
-
-        // Validate the PasswordHistory in Elasticsearch
-        verify(mockPasswordHistorySearchRepository, times(0)).save(passwordHistory);
     }
 
     @Test
@@ -306,33 +250,11 @@ public class PasswordHistoryResourceIT {
 
         // Delete the passwordHistory
         restPasswordHistoryMockMvc.perform(delete("/api/password-histories/{id}", passwordHistory.getId())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item
         List<PasswordHistory> passwordHistoryList = passwordHistoryRepository.findAll();
         assertThat(passwordHistoryList).hasSize(databaseSizeBeforeDelete - 1);
-
-        // Validate the PasswordHistory in Elasticsearch
-        verify(mockPasswordHistorySearchRepository, times(1)).deleteById(passwordHistory.getId());
-    }
-
-    @Test
-    @Transactional
-    public void searchPasswordHistory() throws Exception {
-        // Initialize the database
-        passwordHistoryRepository.saveAndFlush(passwordHistory);
-        when(mockPasswordHistorySearchRepository.search(queryStringQuery("id:" + passwordHistory.getId()), PageRequest.of(0, 20)))
-            .thenReturn(new PageImpl<>(Collections.singletonList(passwordHistory), PageRequest.of(0, 1), 1));
-        // Search the passwordHistory
-        restPasswordHistoryMockMvc.perform(get("/api/_search/password-histories?query=id:" + passwordHistory.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(passwordHistory.getId().intValue())))
-            .andExpect(jsonPath("$.[*].history_no1").value(hasItem(DEFAULT_HISTORY_NO_1)))
-            .andExpect(jsonPath("$.[*].history_no2").value(hasItem(DEFAULT_HISTORY_NO_2)))
-            .andExpect(jsonPath("$.[*].history_no3").value(hasItem(DEFAULT_HISTORY_NO_3)))
-            .andExpect(jsonPath("$.[*].history_no4").value(hasItem(DEFAULT_HISTORY_NO_4)))
-            .andExpect(jsonPath("$.[*].history_no5").value(hasItem(DEFAULT_HISTORY_NO_5)));
     }
 }

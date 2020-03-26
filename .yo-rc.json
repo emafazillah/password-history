@@ -3,7 +3,7 @@
     "promptValues": {
       "packageName": "com.ema.test.passwordhistory"
     },
-    "jhipsterVersion": "6.5.1",
+    "jhipsterVersion": "6.8.0",
     "baseName": "passwordhistory",
     "packageName": "com.ema.test.passwordhistory",
     "packageFolder": "com/ema/test/passwordhistory",
@@ -35,6 +35,7 @@
     "entitySuffix": "",
     "dtoSuffix": "DTO",
     "otherModules": [],
-    "blueprints": []
+    "blueprints": [],
+    "creationTimestamp": 1585188795245
   }
 }

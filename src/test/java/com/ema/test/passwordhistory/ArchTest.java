@@ -18,9 +18,9 @@ class ArchTest {
 
         noClasses()
             .that()
-                .resideInAnyPackage("..service..")
+                .resideInAnyPackage("com.ema.test.passwordhistory.service..")
             .or()
-                .resideInAnyPackage("..repository..")
+                .resideInAnyPackage("com.ema.test.passwordhistory.repository..")
             .should().dependOnClassesThat()
                 .resideInAnyPackage("..com.ema.test.passwordhistory.web..")
         .because("Services and repositories should not depend on web layer")

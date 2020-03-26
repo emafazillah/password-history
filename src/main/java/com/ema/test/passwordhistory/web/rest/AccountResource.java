@@ -1,6 +1,5 @@
 package com.ema.test.passwordhistory.web.rest;
 
-
 import com.ema.test.passwordhistory.domain.User;
 import com.ema.test.passwordhistory.repository.UserRepository;
 import com.ema.test.passwordhistory.security.SecurityUtils;
@@ -254,14 +253,17 @@ public class AccountResource {
      * {@code POST   /account/reset-password/init} : Send an email to reset the password of the user.
      *
      * @param mail the mail of the user.
-     * @throws EmailNotFoundException {@code 400 (Bad Request)} if the email address is not registered.
      */
     @PostMapping(path = "/account/reset-password/init")
     public void requestPasswordReset(@RequestBody String mail) {
-       mailService.sendPasswordResetMail(
-           userService.requestPasswordReset(mail)
-               .orElseThrow(EmailNotFoundException::new)
-       );
+        Optional<User> user = userService.requestPasswordReset(mail);
+        if (user.isPresent()) {
+            mailService.sendPasswordResetMail(user.get());
+        } else {
+            // Pretend the request has been successful to prevent checking which emails really exist
+            // but log that an invalid attempt has been made
+            log.warn("Password reset requested for non existing mail '{}'", mail);
+        }
     }
 
     /**

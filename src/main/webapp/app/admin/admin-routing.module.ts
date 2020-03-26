@@ -8,7 +8,10 @@ import { RouterModule } from '@angular/router';
     RouterModule.forChild([
       {
         path: 'user-management',
-        loadChildren: () => import('./user-management/user-management.module').then(m => m.UserManagementModule)
+        loadChildren: () => import('./user-management/user-management.module').then(m => m.UserManagementModule),
+        data: {
+          pageTitle: 'Users'
+        }
       },
       {
         path: 'audits',
@@ -21,10 +24,6 @@ import { RouterModule } from '@angular/router';
       {
         path: 'docs',
         loadChildren: () => import('./docs/docs.module').then(m => m.DocsModule)
-      },
-      {
-        path: 'gateway',
-        loadChildren: () => import('./gateway/gateway.module').then(m => m.GatewayModule)
       },
       {
         path: 'health',

@@ -5,9 +5,6 @@ import com.ema.test.passwordhistory.config.Constants;
 import com.ema.test.passwordhistory.domain.Authority;
 import com.ema.test.passwordhistory.domain.User;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-
 import javax.validation.constraints.*;
 import java.time.Instant;
 import java.util.Set;

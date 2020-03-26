@@ -2,7 +2,6 @@ package com.ema.test.passwordhistory.service;
 
 import com.ema.test.passwordhistory.domain.PasswordHistory;
 import com.ema.test.passwordhistory.repository.PasswordHistoryRepository;
-import com.ema.test.passwordhistory.repository.search.PasswordHistorySearchRepository;
 import com.ema.test.passwordhistory.service.dto.PasswordHistoryDTO;
 import com.ema.test.passwordhistory.service.mapper.PasswordHistoryMapper;
 import org.slf4j.Logger;
@@ -16,8 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
-
 /**
  * Service Implementation for managing {@link PasswordHistory}.
  */
@@ -30,16 +27,13 @@ public class PasswordHistoryService {
     private final PasswordHistoryRepository passwordHistoryRepository;
 
     private final PasswordHistoryMapper passwordHistoryMapper;
-
-    private final PasswordHistorySearchRepository passwordHistorySearchRepository;
     
     private final PasswordEncoder passwordEncoder;
 
     public PasswordHistoryService(PasswordHistoryRepository passwordHistoryRepository, PasswordHistoryMapper passwordHistoryMapper, 
-    		PasswordHistorySearchRepository passwordHistorySearchRepository, PasswordEncoder passwordEncoder) {
+    		PasswordEncoder passwordEncoder) {
         this.passwordHistoryRepository = passwordHistoryRepository;
         this.passwordHistoryMapper = passwordHistoryMapper;
-        this.passwordHistorySearchRepository = passwordHistorySearchRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -53,9 +47,7 @@ public class PasswordHistoryService {
         log.debug("Request to save PasswordHistory : {}", passwordHistoryDTO);
         PasswordHistory passwordHistory = passwordHistoryMapper.toEntity(passwordHistoryDTO);
         passwordHistory = passwordHistoryRepository.save(passwordHistory);
-        PasswordHistoryDTO result = passwordHistoryMapper.toDto(passwordHistory);
-        passwordHistorySearchRepository.save(passwordHistory);
-        return result;
+        return passwordHistoryMapper.toDto(passwordHistory);
     }
 
     /**
@@ -70,7 +62,6 @@ public class PasswordHistoryService {
         return passwordHistoryRepository.findAll(pageable)
             .map(passwordHistoryMapper::toDto);
     }
-
 
     /**
      * Get one passwordHistory by id.
@@ -93,21 +84,6 @@ public class PasswordHistoryService {
     public void delete(Long id) {
         log.debug("Request to delete PasswordHistory : {}", id);
         passwordHistoryRepository.deleteById(id);
-        passwordHistorySearchRepository.deleteById(id);
-    }
-
-    /**
-     * Search for the passwordHistory corresponding to the query.
-     *
-     * @param query the query of the search.
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public Page<PasswordHistoryDTO> search(String query, Pageable pageable) {
-        log.debug("Request to search for a page of PasswordHistories for query {}", query);
-        return passwordHistorySearchRepository.search(queryStringQuery(query), pageable)
-            .map(passwordHistoryMapper::toDto);
     }
     
     @Transactional(readOnly = true)
