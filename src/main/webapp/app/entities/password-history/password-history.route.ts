@@ -1,25 +1,35 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, Routes } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
 import { JhiResolvePagingParams } from 'ng-jhipster';
+import { Observable, of, EMPTY } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+
+import { Authority } from 'app/shared/constants/authority.constants';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
-import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { PasswordHistory } from 'app/shared/model/password-history.model';
+import { IPasswordHistory, PasswordHistory } from 'app/shared/model/password-history.model';
 import { PasswordHistoryService } from './password-history.service';
 import { PasswordHistoryComponent } from './password-history.component';
 import { PasswordHistoryDetailComponent } from './password-history-detail.component';
 import { PasswordHistoryUpdateComponent } from './password-history-update.component';
-import { IPasswordHistory } from 'app/shared/model/password-history.model';
 
 @Injectable({ providedIn: 'root' })
 export class PasswordHistoryResolve implements Resolve<IPasswordHistory> {
-  constructor(private service: PasswordHistoryService) {}
+  constructor(private service: PasswordHistoryService, private router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IPasswordHistory> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IPasswordHistory> | Observable<never> {
     const id = route.params['id'];
     if (id) {
-      return this.service.find(id).pipe(map((passwordHistory: HttpResponse<PasswordHistory>) => passwordHistory.body));
+      return this.service.find(id).pipe(
+        flatMap((passwordHistory: HttpResponse<PasswordHistory>) => {
+          if (passwordHistory.body) {
+            return of(passwordHistory.body);
+          } else {
+            this.router.navigate(['404']);
+            return EMPTY;
+          }
+        })
+      );
     }
     return of(new PasswordHistory());
   }
@@ -33,7 +43,7 @@ export const passwordHistoryRoute: Routes = [
       pagingParams: JhiResolvePagingParams
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: [Authority.USER],
       defaultSort: 'id,asc',
       pageTitle: 'PasswordHistories'
     },
@@ -46,7 +56,7 @@ export const passwordHistoryRoute: Routes = [
       passwordHistory: PasswordHistoryResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: [Authority.USER],
       pageTitle: 'PasswordHistories'
     },
     canActivate: [UserRouteAccessService]
@@ -58,7 +68,7 @@ export const passwordHistoryRoute: Routes = [
       passwordHistory: PasswordHistoryResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: [Authority.USER],
       pageTitle: 'PasswordHistories'
     },
     canActivate: [UserRouteAccessService]
@@ -70,7 +80,7 @@ export const passwordHistoryRoute: Routes = [
       passwordHistory: PasswordHistoryResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      authorities: [Authority.USER],
       pageTitle: 'PasswordHistories'
     },
     canActivate: [UserRouteAccessService]

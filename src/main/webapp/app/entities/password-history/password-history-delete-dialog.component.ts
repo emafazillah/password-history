@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
@@ -10,7 +9,7 @@ import { PasswordHistoryService } from './password-history.service';
   templateUrl: './password-history-delete-dialog.component.html'
 })
 export class PasswordHistoryDeleteDialogComponent {
-  passwordHistory: IPasswordHistory;
+  passwordHistory?: IPasswordHistory;
 
   constructor(
     protected passwordHistoryService: PasswordHistoryService,
@@ -18,17 +17,14 @@ export class PasswordHistoryDeleteDialogComponent {
     protected eventManager: JhiEventManager
   ) {}
 
-  clear() {
-    this.activeModal.dismiss('cancel');
+  cancel(): void {
+    this.activeModal.dismiss();
   }
 
-  confirmDelete(id: number) {
+  confirmDelete(id: number): void {
     this.passwordHistoryService.delete(id).subscribe(() => {
-      this.eventManager.broadcast({
-        name: 'passwordHistoryListModification',
-        content: 'Deleted an passwordHistory'
-      });
-      this.activeModal.dismiss(true);
+      this.eventManager.broadcast('passwordHistoryListModification');
+      this.activeModal.close();
     });
   }
 }

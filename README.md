@@ -1,10 +1,10 @@
 # passwordhistory
 
-This application was generated using JHipster 6.5.1, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v6.5.1](https://www.jhipster.tech/documentation-archive/v6.5.1).
+This application was generated using JHipster 6.8.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v6.8.0](https://www.jhipster.tech/documentation-archive/v6.8.0).
 
 This is a "gateway" application intended to be part of a microservice architecture, please refer to the [Doing microservices with JHipster][] page of the documentation for more information.
 
-This application is configured for Service Discovery and Configuration with the JHipster-Registry. On launch, it will refuse to start if it is not able to connect to the JHipster-Registry at [http://localhost:8761](http://localhost:8761). For more information, read our documentation on [Service Discovery and Configuration with the JHipster-Registry][].
+This application is configured for Service Discovery and Configuration with . On launch, it will refuse to start if it is not able to connect to .
 
 ## Development
 
@@ -22,13 +22,6 @@ You will only need to run this command when dependencies change in [package.json
 
 We use yarn scripts and [Webpack][] as our build system.
 
-If you are using hazelcast as a cache, you will have to launch a cache server.
-To start your cache server, run:
-
-```
-docker-compose -f src/main/docker/hazelcast-management-center.yml up -d
-```
-
 Run the following commands in two separate terminals to create a blissful development experience where your browser
 auto-refreshes when files change on your hard drive.
 
@@ -43,7 +36,7 @@ The `yarn run` command will list all of the scripts available to run for this pr
 
 ### PWA Support
 
-JHipster ships with PWA (Progressive Web App) support, and it's disabled by default. One of the main components of a PWA is a service worker.
+JHipster ships with PWA (Progressive Web App) support, and it's turned off by default. One of the main components of a PWA is a service worker.
 
 The service worker initialization code is commented out by default. To enable it, uncomment the following code in `src/main/webapp/index.html`:
 
@@ -191,15 +184,14 @@ For more information refer to [Using Docker and Docker-Compose][], this page als
 To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
 
 [jhipster homepage and latest documentation]: https://www.jhipster.tech
-[jhipster 6.5.1 archive]: https://www.jhipster.tech/documentation-archive/v6.5.1
-[doing microservices with jhipster]: https://www.jhipster.tech/documentation-archive/v6.5.1/microservices-architecture/
-[using jhipster in development]: https://www.jhipster.tech/documentation-archive/v6.5.1/development/
-[service discovery and configuration with the jhipster-registry]: https://www.jhipster.tech/documentation-archive/v6.5.1/microservices-architecture/#jhipster-registry
-[using docker and docker-compose]: https://www.jhipster.tech/documentation-archive/v6.5.1/docker-compose
-[using jhipster in production]: https://www.jhipster.tech/documentation-archive/v6.5.1/production/
-[running tests page]: https://www.jhipster.tech/documentation-archive/v6.5.1/running-tests/
-[code quality page]: https://www.jhipster.tech/documentation-archive/v6.5.1/code-quality/
-[setting up continuous integration]: https://www.jhipster.tech/documentation-archive/v6.5.1/setting-up-ci/
+[jhipster 6.8.0 archive]: https://www.jhipster.tech/documentation-archive/v6.8.0
+[doing microservices with jhipster]: https://www.jhipster.tech/documentation-archive/v6.8.0/microservices-architecture/
+[using jhipster in development]: https://www.jhipster.tech/documentation-archive/v6.8.0/development/
+[using docker and docker-compose]: https://www.jhipster.tech/documentation-archive/v6.8.0/docker-compose
+[using jhipster in production]: https://www.jhipster.tech/documentation-archive/v6.8.0/production/
+[running tests page]: https://www.jhipster.tech/documentation-archive/v6.8.0/running-tests/
+[code quality page]: https://www.jhipster.tech/documentation-archive/v6.8.0/code-quality/
+[setting up continuous integration]: https://www.jhipster.tech/documentation-archive/v6.8.0/setting-up-ci/
 [node.js]: https://nodejs.org/
 [yarn]: https://yarnpkg.org/
 [webpack]: https://webpack.github.io/

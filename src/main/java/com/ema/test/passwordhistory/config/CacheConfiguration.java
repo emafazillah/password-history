@@ -42,16 +42,16 @@ public class CacheConfiguration {
             createCache(cm, com.ema.test.passwordhistory.domain.User.class.getName());
             createCache(cm, com.ema.test.passwordhistory.domain.Authority.class.getName());
             createCache(cm, com.ema.test.passwordhistory.domain.User.class.getName() + ".authorities");
+            createCache(cm, com.ema.test.passwordhistory.domain.PasswordHistory.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }
 
     private void createCache(javax.cache.CacheManager cm, String cacheName) {
         javax.cache.Cache<Object, Object> cache = cm.getCache(cacheName);
-        if (cache != null) {
-            cm.destroyCache(cacheName);
+        if (cache == null) {
+            cm.createCache(cacheName, jcacheConfiguration);
         }
-        cm.createCache(cacheName, jcacheConfiguration);
     }
 
 }

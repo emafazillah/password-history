@@ -1,4 +1,5 @@
 package com.ema.test.passwordhistory.service.dto;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -6,7 +7,7 @@ import java.util.Objects;
  * A DTO for the {@link com.ema.test.passwordhistory.domain.PasswordHistory} entity.
  */
 public class PasswordHistoryDTO implements Serializable {
-
+    
     private Long id;
 
     private String history_no1;
@@ -23,7 +24,7 @@ public class PasswordHistoryDTO implements Serializable {
     private Long userId;
 
     private String userLogin;
-
+    
     public Long getId() {
         return id;
     }
@@ -118,8 +119,8 @@ public class PasswordHistoryDTO implements Serializable {
             ", history_no3='" + getHistory_no3() + "'" +
             ", history_no4='" + getHistory_no4() + "'" +
             ", history_no5='" + getHistory_no5() + "'" +
-            ", user=" + getUserId() +
-            ", user='" + getUserLogin() + "'" +
+            ", userId=" + getUserId() +
+            ", userLogin='" + getUserLogin() + "'" +
             "}";
     }
 }

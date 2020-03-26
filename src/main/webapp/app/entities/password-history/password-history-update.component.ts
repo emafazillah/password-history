@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { JhiAlertService } from 'ng-jhipster';
+
 import { IPasswordHistory, PasswordHistory } from 'app/shared/model/password-history.model';
 import { PasswordHistoryService } from './password-history.service';
 import { IUser } from 'app/core/user/user.model';
@@ -16,9 +15,8 @@ import { UserService } from 'app/core/user/user.service';
   templateUrl: './password-history-update.component.html'
 })
 export class PasswordHistoryUpdateComponent implements OnInit {
-  isSaving: boolean;
-
-  users: IUser[];
+  isSaving = false;
+  users: IUser[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -31,24 +29,21 @@ export class PasswordHistoryUpdateComponent implements OnInit {
   });
 
   constructor(
-    protected jhiAlertService: JhiAlertService,
     protected passwordHistoryService: PasswordHistoryService,
     protected userService: UserService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
 
-  ngOnInit() {
-    this.isSaving = false;
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ passwordHistory }) => {
       this.updateForm(passwordHistory);
+
+      this.userService.query().subscribe((res: HttpResponse<IUser[]>) => (this.users = res.body || []));
     });
-    this.userService
-      .query()
-      .subscribe((res: HttpResponse<IUser[]>) => (this.users = res.body), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
-  updateForm(passwordHistory: IPasswordHistory) {
+  updateForm(passwordHistory: IPasswordHistory): void {
     this.editForm.patchValue({
       id: passwordHistory.id,
       history_no1: passwordHistory.history_no1,
@@ -60,11 +55,11 @@ export class PasswordHistoryUpdateComponent implements OnInit {
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 
-  save() {
+  save(): void {
     this.isSaving = true;
     const passwordHistory = this.createFromForm();
     if (passwordHistory.id !== undefined) {
@@ -77,33 +72,33 @@ export class PasswordHistoryUpdateComponent implements OnInit {
   private createFromForm(): IPasswordHistory {
     return {
       ...new PasswordHistory(),
-      id: this.editForm.get(['id']).value,
-      history_no1: this.editForm.get(['history_no1']).value,
-      history_no2: this.editForm.get(['history_no2']).value,
-      history_no3: this.editForm.get(['history_no3']).value,
-      history_no4: this.editForm.get(['history_no4']).value,
-      history_no5: this.editForm.get(['history_no5']).value,
-      userId: this.editForm.get(['userId']).value
+      id: this.editForm.get(['id'])!.value,
+      history_no1: this.editForm.get(['history_no1'])!.value,
+      history_no2: this.editForm.get(['history_no2'])!.value,
+      history_no3: this.editForm.get(['history_no3'])!.value,
+      history_no4: this.editForm.get(['history_no4'])!.value,
+      history_no5: this.editForm.get(['history_no5'])!.value,
+      userId: this.editForm.get(['userId'])!.value
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IPasswordHistory>>) {
-    result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IPasswordHistory>>): void {
+    result.subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
   }
 
-  protected onSaveSuccess() {
+  protected onSaveSuccess(): void {
     this.isSaving = false;
     this.previousState();
   }
 
-  protected onSaveError() {
+  protected onSaveError(): void {
     this.isSaving = false;
   }
-  protected onError(errorMessage: string) {
-    this.jhiAlertService.error(errorMessage, null, null);
-  }
 
-  trackUserById(index: number, item: IUser) {
+  trackById(index: number, item: IUser): any {
     return item.id;
   }
 }
