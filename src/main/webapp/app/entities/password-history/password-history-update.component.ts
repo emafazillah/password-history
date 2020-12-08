@@ -12,7 +12,7 @@ import { UserService } from 'app/core/user/user.service';
 
 @Component({
   selector: 'jhi-password-history-update',
-  templateUrl: './password-history-update.component.html'
+  templateUrl: './password-history-update.component.html',
 })
 export class PasswordHistoryUpdateComponent implements OnInit {
   isSaving = false;
@@ -25,7 +25,7 @@ export class PasswordHistoryUpdateComponent implements OnInit {
     history_no3: [],
     history_no4: [],
     history_no5: [],
-    userId: []
+    userId: [],
   });
 
   constructor(
@@ -51,7 +51,7 @@ export class PasswordHistoryUpdateComponent implements OnInit {
       history_no3: passwordHistory.history_no3,
       history_no4: passwordHistory.history_no4,
       history_no5: passwordHistory.history_no5,
-      userId: passwordHistory.userId
+      userId: passwordHistory.userId,
     });
   }
 
@@ -78,7 +78,7 @@ export class PasswordHistoryUpdateComponent implements OnInit {
       history_no3: this.editForm.get(['history_no3'])!.value,
       history_no4: this.editForm.get(['history_no4'])!.value,
       history_no5: this.editForm.get(['history_no5'])!.value,
-      userId: this.editForm.get(['userId'])!.value
+      userId: this.editForm.get(['userId'])!.value,
     };
   }
 

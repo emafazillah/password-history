@@ -14,8 +14,8 @@ import { passwordHistoryRoute } from './password-history.route';
     PasswordHistoryComponent,
     PasswordHistoryDetailComponent,
     PasswordHistoryUpdateComponent,
-    PasswordHistoryDeleteDialogComponent
+    PasswordHistoryDeleteDialogComponent,
   ],
-  entryComponents: [PasswordHistoryDeleteDialogComponent]
+  entryComponents: [PasswordHistoryDeleteDialogComponent],
 })
 export class PasswordhistoryPasswordHistoryModule {}

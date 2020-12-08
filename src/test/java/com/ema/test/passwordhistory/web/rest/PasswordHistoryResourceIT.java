@@ -28,7 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link PasswordHistoryResource} REST controller.
  */
 @SpringBootTest(classes = PasswordhistoryApp.class)
-
 @AutoConfigureMockMvc
 @WithMockUser
 public class PasswordHistoryResourceIT {
@@ -105,7 +104,6 @@ public class PasswordHistoryResourceIT {
     @Transactional
     public void createPasswordHistory() throws Exception {
         int databaseSizeBeforeCreate = passwordHistoryRepository.findAll().size();
-
         // Create the PasswordHistory
         PasswordHistoryDTO passwordHistoryDTO = passwordHistoryMapper.toDto(passwordHistory);
         restPasswordHistoryMockMvc.perform(post("/api/password-histories")
@@ -180,7 +178,6 @@ public class PasswordHistoryResourceIT {
             .andExpect(jsonPath("$.history_no4").value(DEFAULT_HISTORY_NO_4))
             .andExpect(jsonPath("$.history_no5").value(DEFAULT_HISTORY_NO_5));
     }
-
     @Test
     @Transactional
     public void getNonExistingPasswordHistory() throws Exception {

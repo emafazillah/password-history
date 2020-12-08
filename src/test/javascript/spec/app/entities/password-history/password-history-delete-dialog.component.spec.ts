@@ -20,7 +20,7 @@ describe('Component Tests', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [PasswordhistoryTestModule],
-        declarations: [PasswordHistoryDeleteDialogComponent]
+        declarations: [PasswordHistoryDeleteDialogComponent],
       })
         .overrideTemplate(PasswordHistoryDeleteDialogComponent, '')
         .compileComponents();

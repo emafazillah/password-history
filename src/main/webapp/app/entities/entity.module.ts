@@ -6,10 +6,10 @@ import { RouterModule } from '@angular/router';
     RouterModule.forChild([
       {
         path: 'password-history',
-        loadChildren: () => import('./password-history/password-history.module').then(m => m.PasswordhistoryPasswordHistoryModule)
-      }
+        loadChildren: () => import('./password-history/password-history.module').then(m => m.PasswordhistoryPasswordHistoryModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
-    ])
-  ]
+    ]),
+  ],
 })
 export class PasswordhistoryEntityModule {}

@@ -13,7 +13,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule]
+        imports: [HttpClientTestingModule],
       });
       expectedResult = null;
       injector = getTestBed();
@@ -37,7 +37,7 @@ describe('Service Tests', () => {
       it('should create a PasswordHistory', () => {
         const returnedFromService = Object.assign(
           {
-            id: 0
+            id: 0,
           },
           elemDefault
         );
@@ -58,7 +58,7 @@ describe('Service Tests', () => {
             history_no2: 'BBBBBB',
             history_no3: 'BBBBBB',
             history_no4: 'BBBBBB',
-            history_no5: 'BBBBBB'
+            history_no5: 'BBBBBB',
           },
           elemDefault
         );
@@ -79,7 +79,7 @@ describe('Service Tests', () => {
             history_no2: 'BBBBBB',
             history_no3: 'BBBBBB',
             history_no4: 'BBBBBB',
-            history_no5: 'BBBBBB'
+            history_no5: 'BBBBBB',
           },
           elemDefault
         );

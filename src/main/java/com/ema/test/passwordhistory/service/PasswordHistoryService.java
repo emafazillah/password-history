@@ -58,6 +58,7 @@ public class PasswordHistoryService {
             .map(passwordHistoryMapper::toDto);
     }
 
+
     /**
      * Get one passwordHistory by id.
      *

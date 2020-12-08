@@ -22,9 +22,9 @@ import { ErrorComponent } from './layouts/error/error.component';
     PasswordhistoryHomeModule,
     // jhipster-needle-angular-add-module JHipster will add new module here
     PasswordhistoryEntityModule,
-    PasswordhistoryAppRoutingModule
+    PasswordhistoryAppRoutingModule,
   ],
   declarations: [MainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, FooterComponent],
-  bootstrap: [MainComponent]
+  bootstrap: [MainComponent],
 })
 export class PasswordhistoryAppModule {}

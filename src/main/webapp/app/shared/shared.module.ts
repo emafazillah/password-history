@@ -9,6 +9,6 @@ import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
   imports: [PasswordhistorySharedLibsModule],
   declarations: [AlertComponent, AlertErrorComponent, LoginModalComponent, HasAnyAuthorityDirective],
   entryComponents: [LoginModalComponent],
-  exports: [PasswordhistorySharedLibsModule, AlertComponent, AlertErrorComponent, LoginModalComponent, HasAnyAuthorityDirective]
+  exports: [PasswordhistorySharedLibsModule, AlertComponent, AlertErrorComponent, LoginModalComponent, HasAnyAuthorityDirective],
 })
 export class PasswordhistorySharedModule {}
