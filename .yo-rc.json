@@ -1,0 +1,41 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.ema.test.passwordhistory"
+    },
+    "jhipsterVersion": "6.8.0",
+    "baseName": "passwordhistory",
+    "packageName": "com.ema.test.passwordhistory",
+    "packageFolder": "com/ema/test/passwordhistory",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "clusteredHttpSession": false,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSocialSignIn": false,
+    "jwtSecretKey": "ODNmN2U5YTdmYmJhZDQ2ODAwNGQ1ZGYwYjEwN2M0NzM4NTNiZDVkZDg5ZDI4MjUxNDZkOGZjZTRlYjA1MDc1M2FlMTE0ODc1MDVjZWFkMDhjNTMzNzE0M2YzZDViMWYzOWFhY2YwNDA1ZDAzY2MzMzdlY2NkYWUxN2ZmOGFlOGU=",
+    "clientFramework": "angularX",
+    "useSass": true,
+    "clientPackageManager": "yarn",
+    "applicationType": "gateway",
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "enableTranslation": false,
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "enableSwaggerCodegen": false,
+    "embeddableLaunchScript": false,
+    "clientTheme": "none",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "blueprints": [],
+    "creationTimestamp": 1585188795245
+  }
+}
