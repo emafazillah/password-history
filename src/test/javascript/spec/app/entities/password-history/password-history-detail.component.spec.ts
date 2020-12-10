@@ -16,7 +16,7 @@ describe('Component Tests', () => {
       TestBed.configureTestingModule({
         imports: [PasswordhistoryTestModule],
         declarations: [PasswordHistoryDetailComponent],
-        providers: [{ provide: ActivatedRoute, useValue: route }]
+        providers: [{ provide: ActivatedRoute, useValue: route }],
       })
         .overrideTemplate(PasswordHistoryDetailComponent, '')
         .compileComponents();

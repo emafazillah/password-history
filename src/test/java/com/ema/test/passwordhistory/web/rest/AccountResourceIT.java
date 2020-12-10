@@ -2,30 +2,21 @@ package com.ema.test.passwordhistory.web.rest;
 
 import com.ema.test.passwordhistory.PasswordhistoryApp;
 import com.ema.test.passwordhistory.config.Constants;
-//import com.ema.test.passwordhistory.domain.Authority;
 import com.ema.test.passwordhistory.domain.User;
 import com.ema.test.passwordhistory.repository.AuthorityRepository;
 import com.ema.test.passwordhistory.repository.UserRepository;
 import com.ema.test.passwordhistory.security.AuthoritiesConstants;
-//<<<<<<< HEAD
-//import com.ema.test.passwordhistory.service.MailService;
-//import com.ema.test.passwordhistory.service.PasswordHistoryService;
-//=======
-//>>>>>>> jhipster_upgrade
 import com.ema.test.passwordhistory.service.UserService;
 import com.ema.test.passwordhistory.service.dto.PasswordChangeDTO;
 import com.ema.test.passwordhistory.service.dto.UserDTO;
 import com.ema.test.passwordhistory.web.rest.vm.KeyAndPasswordVM;
 import com.ema.test.passwordhistory.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.RandomStringUtils;
-
-//import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-//import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -60,50 +51,9 @@ public class AccountResourceIT {
     @Autowired
     private PasswordEncoder passwordEncoder;
     
-//    @Autowired
-//    private PasswordHistoryService passwordHistorySerivce;
-
-    @Autowired
-//<<<<<<< HEAD
-//    private HttpMessageConverter<?>[] httpMessageConverters;
-//
-//    @Autowired
-//    private ExceptionTranslator exceptionTranslator;
-//
-//    @Mock
-//    private UserService mockUserService;
-//
-//    @Mock
-//    private MailService mockMailService;
-//
-//    private MockMvc restMvc;
-//
-//    private MockMvc restUserMockMvc;
-//
-//    @BeforeEach
-//    public void setup() {
-//        MockitoAnnotations.initMocks(this);
-//        doNothing().when(mockMailService).sendActivationEmail(any());
-//        AccountResource accountResource =
-//            new AccountResource(userRepository, userService, mockMailService, passwordHistorySerivce);
-//
-//        AccountResource accountUserMockResource =
-//            new AccountResource(userRepository, mockUserService, mockMailService, passwordHistorySerivce);
-//
-//        this.restMvc = MockMvcBuilders.standaloneSetup(accountResource)
-//            .setMessageConverters(httpMessageConverters)
-//            .setControllerAdvice(exceptionTranslator)
-//            .build();
-//        this.restUserMockMvc = MockMvcBuilders.standaloneSetup(accountUserMockResource)
-//            .setControllerAdvice(exceptionTranslator)
-//            .build();
-//    }
-//=======
     private MockMvc restAccountMockMvc;
-//>>>>>>> jhipster_upgrade
 
     @Test
-//    @WithUnauthenticatedMockUser
     public void testNonAuthenticatedUser() throws Exception {
         restAccountMockMvc.perform(get("/api/authenticate")
             .accept(MediaType.APPLICATION_JSON))
@@ -185,7 +135,7 @@ public class AccountResourceIT {
     @Transactional
     public void testRegisterInvalidLogin() throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
-        invalidUser.setLogin("funky-log!n");// <-- invalid
+        invalidUser.setLogin("funky-log(n");// <-- invalid
         invalidUser.setPassword("password");
         invalidUser.setFirstName("Funky");
         invalidUser.setLastName("One");
@@ -435,7 +385,7 @@ public class AccountResourceIT {
                 .content(TestUtil.convertObjectToJsonBytes(validUser)))
             .andExpect(status().isCreated());
 
-        Optional<User> userDup = userRepository.findOneByLogin("badguy");
+        Optional<User> userDup = userRepository.findOneWithAuthoritiesByLogin("badguy");
         assertThat(userDup.isPresent()).isTrue();
         assertThat(userDup.get().getAuthorities()).hasSize(1)
             .containsExactly(authorityRepository.findById(AuthoritiesConstants.USER).get());
@@ -477,7 +427,6 @@ public class AccountResourceIT {
         user.setEmail("save-account@example.com");
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
-
         userRepository.saveAndFlush(user);
 
         UserDTO userDTO = new UserDTO();
@@ -496,7 +445,7 @@ public class AccountResourceIT {
                 .content(TestUtil.convertObjectToJsonBytes(userDTO)))
             .andExpect(status().isOk());
 
-        User updatedUser = userRepository.findOneByLogin(user.getLogin()).orElse(null);
+        User updatedUser = userRepository.findOneWithAuthoritiesByLogin(user.getLogin()).orElse(null);
         assertThat(updatedUser.getFirstName()).isEqualTo(userDTO.getFirstName());
         assertThat(updatedUser.getLastName()).isEqualTo(userDTO.getLastName());
         assertThat(updatedUser.getEmail()).isEqualTo(userDTO.getEmail());
@@ -547,7 +496,6 @@ public class AccountResourceIT {
         user.setEmail("save-existing-email@example.com");
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
-
         userRepository.saveAndFlush(user);
 
         User anotherUser = new User();
@@ -587,7 +535,6 @@ public class AccountResourceIT {
         user.setEmail("save-existing-email-and-login@example.com");
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
-
         userRepository.saveAndFlush(user);
 
         UserDTO userDTO = new UserDTO();
@@ -742,12 +689,12 @@ public class AccountResourceIT {
         User user = new User();
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
-        user.setLogin("password-reset");
-        user.setEmail("password-reset@example.com");
+        user.setLogin("password-reset-upper-case");
+        user.setEmail("password-reset-upper-case@example.com");
         userRepository.saveAndFlush(user);
 
         restAccountMockMvc.perform(post("/api/account/reset-password/init")
-            .content("password-reset@EXAMPLE.COM")
+            .content("password-reset-upper-case@EXAMPLE.COM")
 )
             .andExpect(status().isOk());
     }

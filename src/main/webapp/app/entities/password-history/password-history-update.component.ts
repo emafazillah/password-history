@@ -12,7 +12,7 @@ import { UserService } from 'app/core/user/user.service';
 
 @Component({
   selector: 'jhi-password-history-update',
-  templateUrl: './password-history-update.component.html'
+  templateUrl: './password-history-update.component.html',
 })
 export class PasswordHistoryUpdateComponent implements OnInit {
   isSaving = false;
@@ -20,12 +20,21 @@ export class PasswordHistoryUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
+<<<<<<< HEAD
     historyNo1: [],
     historyNo2: [],
     historyNo3: [],
     historyNo4: [],
     historyNo5: [],
     userId: []
+=======
+    history_no1: [],
+    history_no2: [],
+    history_no3: [],
+    history_no4: [],
+    history_no5: [],
+    userId: [],
+>>>>>>> jhipster_upgrade
   });
 
   constructor(
@@ -46,12 +55,21 @@ export class PasswordHistoryUpdateComponent implements OnInit {
   updateForm(passwordHistory: IPasswordHistory): void {
     this.editForm.patchValue({
       id: passwordHistory.id,
+<<<<<<< HEAD
       historyNo1: passwordHistory.historyNo1,
       historyNo2: passwordHistory.historyNo2,
       historyNo3: passwordHistory.historyNo3,
       historyNo4: passwordHistory.historyNo4,
       historyNo5: passwordHistory.historyNo5,
       userId: passwordHistory.userId
+=======
+      history_no1: passwordHistory.history_no1,
+      history_no2: passwordHistory.history_no2,
+      history_no3: passwordHistory.history_no3,
+      history_no4: passwordHistory.history_no4,
+      history_no5: passwordHistory.history_no5,
+      userId: passwordHistory.userId,
+>>>>>>> jhipster_upgrade
     });
   }
 
@@ -73,12 +91,21 @@ export class PasswordHistoryUpdateComponent implements OnInit {
     return {
       ...new PasswordHistory(),
       id: this.editForm.get(['id'])!.value,
+<<<<<<< HEAD
       historyNo1: this.editForm.get(['historyNo1'])!.value,
       historyNo2: this.editForm.get(['historyNo2'])!.value,
       historyNo3: this.editForm.get(['historyNo3'])!.value,
       historyNo4: this.editForm.get(['historyNo4'])!.value,
       historyNo5: this.editForm.get(['historyNo5'])!.value,
       userId: this.editForm.get(['userId'])!.value
+=======
+      history_no1: this.editForm.get(['history_no1'])!.value,
+      history_no2: this.editForm.get(['history_no2'])!.value,
+      history_no3: this.editForm.get(['history_no3'])!.value,
+      history_no4: this.editForm.get(['history_no4'])!.value,
+      history_no5: this.editForm.get(['history_no5'])!.value,
+      userId: this.editForm.get(['userId'])!.value,
+>>>>>>> jhipster_upgrade
     };
   }
 

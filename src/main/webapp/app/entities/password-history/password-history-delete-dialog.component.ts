@@ -6,7 +6,7 @@ import { IPasswordHistory } from 'app/shared/model/password-history.model';
 import { PasswordHistoryService } from './password-history.service';
 
 @Component({
-  templateUrl: './password-history-delete-dialog.component.html'
+  templateUrl: './password-history-delete-dialog.component.html',
 })
 export class PasswordHistoryDeleteDialogComponent {
   passwordHistory?: IPasswordHistory;

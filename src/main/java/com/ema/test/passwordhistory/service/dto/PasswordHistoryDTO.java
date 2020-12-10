@@ -1,7 +1,6 @@
 package com.ema.test.passwordhistory.service.dto;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * A DTO for the {@link com.ema.test.passwordhistory.domain.PasswordHistory} entity.
@@ -96,22 +95,19 @@ public class PasswordHistoryDTO implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof PasswordHistoryDTO)) {
             return false;
         }
 
-        PasswordHistoryDTO passwordHistoryDTO = (PasswordHistoryDTO) o;
-        if (passwordHistoryDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), passwordHistoryDTO.getId());
+        return id != null && id.equals(((PasswordHistoryDTO) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "PasswordHistoryDTO{" +

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
-import { JhiResolvePagingParams } from 'ng-jhipster';
 import { Observable, of, EMPTY } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 
@@ -39,50 +38,47 @@ export const passwordHistoryRoute: Routes = [
   {
     path: '',
     component: PasswordHistoryComponent,
-    resolve: {
-      pagingParams: JhiResolvePagingParams
-    },
     data: {
       authorities: [Authority.USER],
       defaultSort: 'id,asc',
-      pageTitle: 'PasswordHistories'
+      pageTitle: 'PasswordHistories',
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
   },
   {
     path: ':id/view',
     component: PasswordHistoryDetailComponent,
     resolve: {
-      passwordHistory: PasswordHistoryResolve
+      passwordHistory: PasswordHistoryResolve,
     },
     data: {
       authorities: [Authority.USER],
-      pageTitle: 'PasswordHistories'
+      pageTitle: 'PasswordHistories',
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
   },
   {
     path: 'new',
     component: PasswordHistoryUpdateComponent,
     resolve: {
-      passwordHistory: PasswordHistoryResolve
+      passwordHistory: PasswordHistoryResolve,
     },
     data: {
       authorities: [Authority.USER],
-      pageTitle: 'PasswordHistories'
+      pageTitle: 'PasswordHistories',
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
   },
   {
     path: ':id/edit',
     component: PasswordHistoryUpdateComponent,
     resolve: {
-      passwordHistory: PasswordHistoryResolve
+      passwordHistory: PasswordHistoryResolve,
     },
     data: {
       authorities: [Authority.USER],
-      pageTitle: 'PasswordHistories'
+      pageTitle: 'PasswordHistories',
     },
-    canActivate: [UserRouteAccessService]
-  }
+    canActivate: [UserRouteAccessService],
+  },
 ];

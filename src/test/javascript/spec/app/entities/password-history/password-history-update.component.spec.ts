@@ -18,7 +18,7 @@ describe('Component Tests', () => {
       TestBed.configureTestingModule({
         imports: [PasswordhistoryTestModule],
         declarations: [PasswordHistoryUpdateComponent],
-        providers: [FormBuilder]
+        providers: [FormBuilder],
       })
         .overrideTemplate(PasswordHistoryUpdateComponent, '')
         .compileComponents();
